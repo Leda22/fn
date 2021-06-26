@@ -45,16 +45,16 @@ const theme = createMuiTheme({
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="/">
+          UNIV CLUB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     );
-}
+  }
 
 const drawerWidth = 240;
 
@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
 
     },
     fixedHeight: {
-        height: 600,
+        height: 500,
     },
 
     user: {
@@ -193,7 +193,7 @@ const StyledMenu = withStyles({
 ));
 
 
-export default function Clubpresident() {
+export default function Profiluser() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -248,17 +248,14 @@ export default function Clubpresident() {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>
-                                <SettingsIcon />
-                                Settings
-                            </MenuItem>
+                           
                             <MenuItem onClick={logout}>
                                 <ExitToAppIcon />
                                 Logout
                             </MenuItem>
                         </StyledMenu>
                         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                            Dashboard
+                            CLUB NAME
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={7} color="primary">
@@ -313,9 +310,8 @@ export default function Clubpresident() {
                         <Grid item xs={5} >
                             <Paper className={fixedHeightPaper}>
                                 <div>
-                                    <h1>About Club</h1>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed urna in justo euismod condimentum.</p>
-                                    <Divider variant="middle" />
+                                    <h1 style={{paddingBottom:"3%",color:"#009688"}}>ABOUT CLUB</h1>
+                                    <Divider  />
                                     <div className={classes.about}>
                                     <div className={classes.about0} >
                                         <CalendarToday/>

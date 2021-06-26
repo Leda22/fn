@@ -9,7 +9,7 @@ import Card from './components/Card';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { Link } from 'react-router-dom';
-
+import Carouselevent from './components/Carouselevent';
 
 
 
@@ -211,12 +211,7 @@ export default function Home() {
                 </div>
             </div>
             <h1 className={classes.header1}>Latest Activities</h1>
-            <div className={classes.card}>
-            <Card/>
-            <Card/>
-            <Card/>
-
-            </div>
+            <Carouselevent/>
             <Footer/>
         </div>
 

@@ -1,14 +1,18 @@
-import React from 'react';
-import Post from "./Post";
-import "./feed.css";
+import React, { useEffect, useState } from 'react';
+import './feed.css';
+import MessageSender from './MessageSender';
 
-export default function Feed() {
+function Feed() {
   
+
+  
+
   return (
     <div className="feed">
-      <div className="feedWrapper">
-          <Post/>
-      </div>
+      <MessageSender />
+     
     </div>
   );
 }
+
+export default Feed;

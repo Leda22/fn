@@ -13,6 +13,8 @@ import Profils from "./Profils";
 import Axios from 'axios'
 import Learn from "./Learn";
 import About from "./About";
+import Profilview from "./Profilview";
+import Notfound from "./Notfound";
 
 
 
@@ -40,6 +42,10 @@ export default function App() {
           <Route exact path='/login' component={Login}/>
           <Route exact path="/" component={Home}/>
           <Route exact path='/clubs' component={Clubs}/>
+          <Route exact path='/@username' component={Profilview}/>
+          <Route exact path='/notfound' component={Notfound}/>
+
+
 
         </Switch>
     </Router>

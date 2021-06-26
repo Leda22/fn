@@ -6,13 +6,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Modal from '@material-ui/core/Modal';
-import { Avatar, Button, createChainedFunction, Fab, Fade, IconButton, makeStyles, TextField } from '@material-ui/core';
-import logo from '../images/p.png';
+import { Avatar, Fab, Fade, IconButton, makeStyles} from '@material-ui/core';
+import Logo from '../images/p.png';
 import EditIcon from '@material-ui/icons/Edit';
 import Backdrop from '@material-ui/core/Backdrop';
-import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
-import Popper from '@material-ui/core/Popper';
 import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
@@ -85,22 +83,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 // Generate Order Data
-function createData(id, logo, date, name, shipTo, paymentMethod, amount) {
-  return { id, logo, date, name, shipTo, paymentMethod, amount };
+function createData(id, logo,name,email, president,date, phone, category) {
+  return { id, logo,name,email, president,date, phone, category};
 }
 
 const rows = [
-  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44,),
-  createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
+  createData(0,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+  createData(1,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+  createData(2,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+  createData(3,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+  createData(4,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
 ];
 
 
 
 
-export default function Users() {
+export default function UsersTable() {
   const classes = useStyles();
   const [open, setOpen1] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -137,9 +135,9 @@ export default function Users() {
   };
 
   return (
-    <React.Fragment>
+    <div>
       <div className={classes.ttl}>
-        <Title>Recent Orders</Title>
+        <Title>CLUBS</Title>
         <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon />
@@ -177,16 +175,16 @@ export default function Users() {
           {rows.map((row) => (
             <TableRow key={row.id}>
               <TableCell>
-                <Avatar src={logo} />
+                <Avatar src={row.logo} />
               </TableCell>
-              <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell >{row.amount}</TableCell>
-              <TableCell >{row.amount}</TableCell>
+              <TableCell>{row.email}</TableCell>
+              <TableCell>{row.president}</TableCell>
+              <TableCell>{row.date}</TableCell>
+              <TableCell >{row.phone}</TableCell>
+              <TableCell >{row.category}</TableCell>
               <TableCell >
-                <Button onClick={handleOpen1}><EditIcon /></Button>
+                <IconButton onClick={handleOpen1}><EditIcon /></IconButton>
 
                 
                <Confirm/>
@@ -231,7 +229,7 @@ export default function Users() {
         </Fade>
 
       </Modal>
-    </React.Fragment>
-
+    
+      </div>
   );
 }

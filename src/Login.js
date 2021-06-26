@@ -22,7 +22,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="/">
-        Univ Club
+        UNIV CLUB
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${Log})`,
     backgroundRepeat: "no-repeat",
     backgroundColor: "#020c0f",
-    backgroundSize: "75%",
+    backgroundSize: "60%",
     backgroundPosition: "center",
 
   },
@@ -57,7 +57,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#336699"
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    '& > *': {
+      margin: theme.spacing(2),
+      width: "40ch"
+  },
+   
+  display:"flex",
+  flexDirection:"column",
+  justifyContent: 'center',
     marginTop: "70px",
 
     "& label.Mui-focused": {
@@ -91,14 +98,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "0px 30px",
     boxShadow: "0 3px 5px 2px rgba(0,0,0,0.15)",
   },
-  formControl: {
-    marginTop: 20,
-    margin: theme.spacing(1),
-    minWidth: 200,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+  
 }));
 
 export default function Login() {
@@ -184,9 +184,10 @@ export default function Login() {
             >
               Sign In
             </Button>
+            </form>
+
             <h1> {login} </h1>
             <Copyright />
-          </form>
         </div>
       </Grid>
     </Grid>

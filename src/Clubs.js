@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { Avatar} from '@material-ui/core';
+import { Avatar, Button } from '@material-ui/core';
 import logo from './images/p.png';
 import 'antd/dist/antd.css';
 import Header from './components/Header';
@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
-        height: '100vh',
         overflow: 'auto',
 
     },
@@ -34,32 +33,32 @@ const useStyles = makeStyles((theme) => ({
 
     },
     paper: {
-        padding: theme.spacing(2),
+        backgroundImage: `url("https://cdn.pixabay.com/photo/2016/06/02/02/33/triangles-1430105_960_720.png")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: 300,
         display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-        justifyContent: "center",
-        textAlign: "center",
+        flexDirection: "column",
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    fixedHeight: {
-        height: 240,
-    },
+    
     presdnt: {
         display: "flex",
         flexDirection: 'column',
 
     },
-    
+
     first1: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
     },
-   
+
     large: {
         width: theme.spacing(10),
         height: theme.spacing(10),
-      },
+    },
 
 }));
 
@@ -86,36 +85,39 @@ const rows = [
 export default function Clubs() {
 
     const classes = useStyles();
-   
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  
+
 
     return (
         <div className={classes.main}>
-        <div className={classes.root}>
-            <Header/>
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
-                <Container  className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Recent Deposits */}
-                        {rows.map((row) => (
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper elevation={3}
-                                    className={fixedHeightPaper}>
-                                    <div className={classes.presdnt}>
-                                        <Avatar  className={classes.large} src={logo} style={{ alignSelf: 'center' }} />
-                                        <h3 style={{ paddingTop: '6%' }}>{row.paymentMethod}</h3>
-                                        <p>CLUB</p>
-                                    </div>
-                                </Paper>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Container>
-            </main>
-        </div>
-        <Footer/>
+            <div className={classes.root}>
+                <Header />
+                <main className={classes.content}>
+                    <div className={classes.appBarSpacer} />
+                    <Container maxWidth="xl" className={classes.container}>
+                        <Grid container spacing={3}>
+                            {/* Recent Deposits */}
+                            {rows.map((row) => (
+                                <Grid item xs={4} >
+                                    <Paper elevation={3}
+                                        className={classes.paper}>
+                                        <div className={classes.presdnt}>
+                                            <Avatar className={classes.large} src={logo} style={{ alignSelf: 'center' }} />
+                                            <h3 style={{color:'white', paddingTop: '6%', textAlign:'center',fontFamily:"Time New Roman" }}>{row.paymentMethod}</h3>
+                                            <p style={{ color:'white', textAlign:'center',fontFamily:"Time New Roman"  }}>CLUB</p>
+                                            <Button size="large" variant="outlined" color="primary" href="/@username">
+                                                SEE PROFIL
+                                            </Button>
+                                        </div>
+                                    </Paper>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Container>
+                </main>
+            </div>
+            <Footer />
         </div>
     );
 }

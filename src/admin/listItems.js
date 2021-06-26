@@ -2,16 +2,13 @@ import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Avatar, Divider, makeStyles } from '@material-ui/core';
+import { Avatar, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import logo from '../images/p.png';
-
+import InboxIcon from '@material-ui/icons/Inbox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,36 +96,14 @@ export default function SelectedListItem() {
     </ListItem>
     <ListItem button
       selected={selectedIndex === 5}
-          onClick={(event) => handleListItemClick(event, 5)}>
+          onClick={(event) => handleListItemClick(event, 5)}
+          component={Link} to="/admin/inbox">
       <ListItemIcon>
-        <DashboardIcon />
+        <InboxIcon />
       </ListItemIcon>
-      <ListItemText primary="Chat" />
+      <ListItemText primary="Inbox" />
     </ListItem>
-    <Divider />
-
-    <ListSubheader inset>Saved reports</ListSubheader>
-    <ListItem button selected={selectedIndex === 6}
-          onClick={(event) => handleListItemClick(event, 6)}>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItem>
-    <ListItem button selected={selectedIndex ===7}
-          onClick={(event) => handleListItemClick(event, 7)}>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItem>
-    <ListItem button selected={selectedIndex === 8}
-          onClick={(event) => handleListItemClick(event, 8)}>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItem>
+    
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 //import { Redirect } from 'react-router-dom'
-import Dashboard from './admin/Dashboard'
+import Dashboard from './admin/Dashboard';
+
 
 import {
     BrowserRouter as Router,
@@ -10,6 +11,8 @@ import {
 import Users from './admin/Users';
 import Clubpresident from './admin/Clubpresident';
 import Clubprofil from './admin/Clubprofil';
+import Email from './admin/Email';
+
 function Admin() {
     return (
         <Router>
@@ -18,6 +21,11 @@ function Admin() {
           <Route exact path="/admin/users" component={Users}/>
           <Route exact path="/admin/clubpresidents" component={Clubpresident}/>
           <Route exact path="/admin/clubprofil" component={Clubprofil}/>
+          <Route exact path="/admin/inbox" component={Email}/>
+
+
+
+          
 
         
         </Switch>

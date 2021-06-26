@@ -19,8 +19,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ListItems from './listItems';
-import Chart from './Chart';
-import Table from './Table';
+import Table from './Table1';
 import { Avatar, Menu, MenuItem, withStyles } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmailIcon from '@material-ui/icons/Email';
@@ -36,8 +35,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        UNIV CLUB
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -127,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 400,
+    height: 500,
   },
   fixedHeight1:{
     height:200,
@@ -261,42 +260,37 @@ export default function Dashboard() {
                 <Grid item xs={3}>
                   <Paper elevation={3} className={fixedHeight1Paper}>
                     <SchoolIcon style={{alignSelf:"center"}}/> 
-                    <h1 style={{textAlign:"center"}}>1</h1>
+                    <h1 style={{textAlign:"center",paddingTop:"10%"}}>0</h1>
                     <p>CLUBS</p>
                   </Paper>
                 </Grid>
                 <Grid item xs={3} >
                   <Paper elevation={3} className={fixedHeight1Paper}>
                     <VisibilityIcon style={{alignSelf:"center"}}/>
-                    <h1 style={{textAlign:"center"}}>0</h1>
+                    <h1 style={{textAlign:"center",paddingTop:"10%"}}>0</h1>
                     <p >VISITOR</p>
                   </Paper>
                 </Grid>
                 <Grid item xs={3} >
                   <Paper elevation={3} className={fixedHeight1Paper}>
                     <EventIcon style={{alignSelf:"center"}}/>
-                    <h1 style={{textAlign:"center"}}>0</h1>
+                    <h1 style={{textAlign:"center",paddingTop:"10%"}}>0</h1>
                     <p >OLD ACTIVITIES</p>
                   </Paper>
                 </Grid>
                 <Grid item xs={3} >
                   <Paper elevation={3} className={fixedHeight1Paper}>
                   <EventIcon style={{alignSelf:"center"}}/>
-                  <h1 style={{textAlign:"center"}}>0 </h1>
+                  <h1 style={{textAlign:"center",paddingTop:"10%"}}>0 </h1>
                     <p >UPCOMING ACTIVITIES</p>
                   </Paper>
                 </Grid>
-                <Grid item xs={8} >
+                <Grid item xs={12} >
                 <Paper elevation={3} className={fixedHeightPaper}>
 		<Sliderr/>
                </Paper>
               </Grid>
-            {/* Chart */}
-            <Grid item xs={4}>
-              <Paper elevation={3} className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
+            
             {/* Recent UsersTable */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>

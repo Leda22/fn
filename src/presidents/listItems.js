@@ -2,19 +2,14 @@ import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Avatar, Divider, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import SchoolIcon from '@material-ui/icons/School';
 import HomeIcon from '@material-ui/icons/Home';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import {MessageOutlined} from '@ant-design/icons';
-
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -56,8 +51,8 @@ export default function SelectedListItem() {
       <ListItemText primary="Home" />
     </ListItem>
     <ListItem button     component={Link} to="/profil/@username"
-      selected={selectedIndex === 5}
-          onClick={(event) => handleListItemClick(event, 5)}>
+      selected={selectedIndex === 2}
+          onClick={(event) => handleListItemClick(event, 2)}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
@@ -65,15 +60,15 @@ export default function SelectedListItem() {
     </ListItem>
     <ListItem button 
     component={Link} to="/profil/chat"
-     selected={selectedIndex === 2}
-          onClick={(event) => handleListItemClick(event, 2)}>
+     selected={selectedIndex === 3}
+          onClick={(event) => handleListItemClick(event, 3)}>
       <ListItemIcon>
       <MessageOutlined/>
       </ListItemIcon>
       <ListItemText primary="Chat" />
     </ListItem>
-    <ListItem button selected={selectedIndex === 3}
-          onClick={(event) => handleListItemClick(event, 3)}
+    <ListItem button selected={selectedIndex === 4}
+          onClick={(event) => handleListItemClick(event, 4)}
           component={Link} to="/profil/calendar"
           >
       <ListItemIcon>
@@ -83,14 +78,24 @@ export default function SelectedListItem() {
     </ListItem>
     
     <ListItem button 
-     selected={selectedIndex === 4}
-          onClick={(event) => handleListItemClick(event, 4)}
-              component={Link} to="/admin/users"
+     selected={selectedIndex === 5}
+          onClick={(event) => handleListItemClick(event, 5)}
+              component={Link} to="/profil/Members"
 >
       <ListItemIcon>
-        <PeopleIcon />
+        <PeopleIcon/>
       </ListItemIcon>
       <ListItemText primary="Members" />
+    </ListItem>
+    <ListItem button 
+     selected={selectedIndex === 6}
+          onClick={(event) => handleListItemClick(event, 6)}
+              component={Link} to="/profil/registrations"
+>
+      <ListItemIcon>
+        <GroupAddIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Registrations" />
     </ListItem>
    
     

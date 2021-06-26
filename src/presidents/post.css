@@ -1,79 +1,59 @@
 .post {
   width: 100%;
-  border-radius: 10px;
-  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
-  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
-  margin: 30px 0;
+  margin-top: 15px;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
 }
 
-.postWrapper {
-  padding: 10px;
-}
-
-.postTop {
+.post__top {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  position: relative;
+  align-items: center;
+  padding: 15px;
 }
 
-.postTopLeft {
-  display: flex;
-  align-items: flex-start;
+.post__avatar {
+  margin-right: 10px;
 }
 
-.postProfileImg {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
+.post__topInfo > h3 {
+  font-size: medium;
 }
 
-.postUsername {
+.post__bottom {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 15px 25px;
+}
+.post__image > img {
   width: 100%;
-  font-size: 15px;
-  font-weight: 500;
-  margin: 0 10px;
 }
 
-.postDate{
-    font-size: 12px;
+.post__options {
+  padding-top: 10px;
+  border-top: 1px solid lightgray;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: medium;
+  color: gray;
+  cursor: pointer;
+  padding: 15px;
 }
 
-.postCenter{
-    margin: 20px 0;
+.post__option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  flex: 1;
 }
 
-.postImg{
-    margin-top: 20px;
-    width: 100%;
-    max-height: 500px;
-    object-fit: contain;
+.post__option > p {
+  margin-left: 10px;
 }
 
-.postBottom{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.postBottomLeft{
-    display: flex;
-    align-items: center;   
-}
-
-.likeIcon{
-    width: 24px;
-    height: 24px;
-    margin-right: 5px;
-    cursor: pointer;
-}
-
-.postLikeCounter{
-    font-size: 15px;
-}
-
-.postCommentText{
-    cursor: pointer;
-    border-bottom: 1px dashed gray;
-    font-size: 15px;
+.post__option:hover {
+  background-color: #eff2f5;
+  border-radius: 10px;
 }

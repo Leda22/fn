@@ -41,16 +41,16 @@ const theme = createMuiTheme({
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="/">
+          UNIV CLUB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     );
-}
+  }
 
 const drawerWidth = 240;
 
@@ -156,7 +156,7 @@ const StyledMenu = withStyles({
 ));
 
 
-export default function Clubpresident() {
+export default function Calendarpr() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -211,17 +211,13 @@ export default function Clubpresident() {
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>
-                            <SettingsIcon />
-            Settings
-            </MenuItem>
                         <MenuItem onClick={logout}>
-                            <ExitToAppIcon />
-            Logout
-            </MenuItem>
+                                <ExitToAppIcon />
+                                Logout
+                            </MenuItem>
                     </StyledMenu>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        CLUB NAME
           </Typography>
                     <IconButton color="inherit">
                         <Badge badgeContent={7} color="primary">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import fav from "../images/login.svg";
@@ -31,12 +31,20 @@ export default function Footer() {
         <p>© 2021 UNIV CLUB </p>
       </div>
       <div className={classes.bg2}>
+      <IconButton href="/">
         <img src={fav} alt="" height="25px" />
+        </IconButton>
       </div>
       <div className={classes.bg3}>
-        <EmailIcon />
-        <FacebookIcon />
-        <InstagramIcon />
+        <IconButton>
+        <EmailIcon style={{ fill: 'white' }}/>
+        </IconButton>
+        <IconButton>
+        <FacebookIcon style={{ fill: 'white' }}/>
+        </IconButton>
+        <IconButton>
+        <InstagramIcon style={{ fill: 'white' }}/>
+        </IconButton>
       </div>
     </div>
   );

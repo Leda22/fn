@@ -14,7 +14,8 @@ main:{
         paddingTop:"2%",
         fontSize:"18px",
         padding:'0% 10%',
-        lineHeight:"30px"
+        lineHeight:"30px",
+        fontFamily:"Time New Roman",
 
 
     },
@@ -22,6 +23,7 @@ main:{
         paddingTop:"8%",
         fontSize:"40px",
         color: "#095c71",
+        fontFamily:"Time New Roman" ,
 
 
     }

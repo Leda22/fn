@@ -23,29 +23,25 @@ import { Avatar, Backdrop, Button, Fade, Menu, MenuItem, Modal, TextField, withS
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmailIcon from '@material-ui/icons/Email';
 import Axios from 'axios';
-import logo from '../images/p.png';
-import AddIcon from '@material-ui/icons/Add';
+import Logo from '../images/p.png';
 import SaveIcon from '@material-ui/icons/Save';
 import swal from 'sweetalert';
-import { Carousel } from 'antd';
-import Card from '../components/Card';
 import 'antd/dist/antd.css';
 
 
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="/">
+          UNIV CLUB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     );
-}
-
+  }
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -127,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
     },
     fixedHeight: {
-        height: 240,
+        height: 300,
     },
     presdnt: {
         display: "flex",
@@ -172,6 +168,16 @@ const useStyles = makeStyles((theme) => ({
         width: theme.spacing(10),
         height: theme.spacing(10),
     },
+    paper: {
+        backgroundImage: `url("https://cdn.pixabay.com/photo/2016/06/02/02/33/triangles-1430105_960_720.png")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: 300,
+        display: 'flex',
+        flexDirection: "column",
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 
 }));
 
@@ -196,25 +202,21 @@ const StyledMenu = withStyles({
 ));
 
 // Generate Order Data
-function createData(id, logo, date, name, shipTo, paymentMethod, amount) {
-    return { id, logo, date, name, shipTo, paymentMethod, amount };
+function createData(id, logo, name, email, president, date, phone, category) {
+    return { id, logo, name, email, president, date, phone, category };
 }
 
 const rows = [
-    createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 'BADRAT KHAYR'),
-    createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 'UTC'),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 'ECO CRAFT'),
-    createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-
-
+    createData(0, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
+    createData(1, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
+    createData(2, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
+    createData(3, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
+    createData(4, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
 ];
 
 
 export default function Clubprofil() {
-    const Swal = require('sweetalert2')
+
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
@@ -283,7 +285,7 @@ export default function Clubprofil() {
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Dashboard
-          </Typography>
+                    </Typography>
                     <IconButton color="inherit">
                         <Badge badgeContent={7} color="secondary">
                             <EmailIcon />
@@ -305,12 +307,12 @@ export default function Clubprofil() {
                     >
                         <MenuItem onClick={handleClose}>
                             <SettingsIcon />
-            Settings
-            </MenuItem>
+                            Settings
+                        </MenuItem>
                         <MenuItem onClick={logout}>
                             <ExitToAppIcon />
-            Logout
-            </MenuItem>
+                            Logout
+                        </MenuItem>
                     </StyledMenu>
                 </Toolbar>
             </AppBar>
@@ -332,25 +334,27 @@ export default function Clubprofil() {
 
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
+                <Container maxWidth="xl" className={classes.container}>
                     <Grid container spacing={3}>
                         {/* Recent Deposits */}
                         {rows.map((row) => (
-                            <Grid item xs={12} md={4} lg={3}>
+                            <Grid item xs={4}>
 
 
                                 <Paper elevation={3}
-                                    className={fixedHeightPaper}>
-                                                                                <Button>
+                                    className={classes.paper}>
+
 
                                     <div className={classes.presdnt}>
-                                            <Avatar className={classes.large} src={logo} style={{ alignSelf: 'center' }} />
+                                        <Avatar className={classes.large} src={row.logo} style={{ alignSelf: 'center' }} />
 
-                                        
-                                        <h3 style={{ paddingTop: '6%' }}>{row.paymentMethod}</h3>
-                                        <p>CLUB</p>
+
+                                        <h5 style={{ paddingTop: '10%', color: "white" }}>{row.name}</h5>
+                                        <p style={{ color: "white", alignSelf: 'center' ,paddingBottom:"30%"}}>CLUB</p>
+                                        <Button  variant="contained" color="primary" href="/@username">
+                                          SEE PROFIL
+                                        </Button>
                                     </div>
-                                    </Button>
                                 </Paper>
 
 
@@ -408,7 +412,7 @@ export default function Clubprofil() {
                                         startIcon={<SaveIcon />}
                                     >
                                         Save
-      </Button>
+                                    </Button>
                                 </form>
 
                             </div>

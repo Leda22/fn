@@ -23,31 +23,24 @@ import { Avatar, Backdrop, Button, Fade, FormControlLabel, FormLabel, Menu, Menu
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmailIcon from '@material-ui/icons/Email';
 import Axios from 'axios';
-import logo from '../images/p.png';
-import AddIcon from '@material-ui/icons/Add';
-import SaveIcon from '@material-ui/icons/Save';
-import swal from 'sweetalert';
-import { Carousel } from 'antd';
-import Card from '../components/Card';
+import Logo from '../images/p.png';
 import 'antd/dist/antd.css';
-import Radio from '@material-ui/core/Radio';
-import FormControl from '@material-ui/core/FormControl';
 
 
 
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="/">
+          UNIV CLUB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     );
-}
+  }
 
 const drawerWidth = 240;
 
@@ -126,15 +119,18 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
-        justifyContent: "center",
         textAlign: "center",
+        alignItems:"flex-star"
     },
     fixedHeight: {
-        height: 240,
+        height: 300,
     },
     presdnt: {
         display: "flex",
         flexDirection: 'column',
+        alignItems:"flex-star",
+
+
 
     },
     button2: {
@@ -194,21 +190,17 @@ const StyledMenu = withStyles({
 ));
 
 // Generate Order Data
-function createData(id, logo, date, name, shipTo, paymentMethod, amount) {
-    return { id, logo, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-    createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 'BADRAT KHAYR'),
-    createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 'UTC'),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 'ECO CRAFT'),
-    createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-
-
-];
+function createData(id, logo,name,email, president,date, phone, category) {
+    return { id, logo,name,email, president,date, phone, category};
+  }
+  
+  const rows = [
+    createData(0,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+    createData(1,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+    createData(2,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+    createData(3,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+    createData(4,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
+  ];
 
 
 export default function Clubpresident() {
@@ -261,9 +253,7 @@ export default function Clubpresident() {
     const vv = Boolean(anchorEl);
     const id = vv ? 'simple-popper' : undefined;
 
-    const HandleClick2 = () => {
-        swal("Good job!", "You clicked the button!", "success");
-    };
+   
     const [value, setValue] = React.useState('female');
 
   const handleChange = (event) => {
@@ -339,14 +329,18 @@ export default function Clubpresident() {
                     <Grid container spacing={3}>
                         {/* Recent Deposits */}
                         {rows.map((row) => (
-                            <Grid item xs={12} md={4} lg={3}>
+                            <Grid item xs={4} >
                                 <Paper
                                     className={fixedHeightPaper}>
                                     <div className={classes.presdnt}>
-                                        <Avatar src={logo} style={{ alignSelf: 'center' }} />
-                                        <h3 style={{ paddingTop: '5%' }}>{row.name}</h3>
-                                        <h4 style={{ paddingTop: '6%' }}>{row.paymentMethod}</h4>
-                                        <p>PRESIDENT CLUB</p>
+                                        <Avatar src={row.logo} style={{ alignSelf: 'center' }} />
+                                        <h5 style={{ paddingTop: '5%' }}>{row.president}</h5>
+                                        <h6 style={{ paddingTop: '6%' }}>{row.name}</h6>
+                                        <p style={{color:"grey"}}>PRESIDENT CLUB</p>
+                                        <h6 style={{ paddingTop: '6%' }}>{row.email}</h6>
+                                        <h6 style={{ paddingTop: '2%' }}>{row.phone}</h6>
+
+
                                     </div>
                                 </Paper>
                             </Grid>
@@ -359,64 +353,7 @@ export default function Clubpresident() {
                     <Box pt={4}>
                         <Copyright />
                     </Box>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        className={classes.modal}
-                        open={open1}
-                        onClose={handleClose1}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}
-                    >
-
-                        <Fade in={open1}>
-                            <div className={classes.paper1}>
-                                <h3 style={{ textAlign: 'center' }}>ADD PRESIDENT CLUB</h3>
-                                <form className={classes.form1} noValidate autoComplete="off">
-                                    <div className={classes.first1}>
-                                        <TextField type="text" id="standard-basic" label="First Name" />
-                                        <TextField type="text" id="standard-basic" label="Last Name" />
-                                    </div>
-                                    <TextField
-                                        id="date"
-                                        label="Birthday"
-                                        type="date"
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                     <FormControl component="fieldset">
-      <FormLabel component="legend">Gender</FormLabel>
-      <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
-      </RadioGroup>
-    </FormControl>
-                                     <TextField type="text" id="standard-basic" label="City" />
-                                    <TextField type="email" id="standard-basic" label="Email" />
-                                    <TextField type="tel" id="standard-basic" label="Phone Number" />
-                                    <TextField type="text" id="standard-basic" label="University" />
-                                    <TextField type="text" id="standard-basic" label="The College" />
-                                    <TextField type="text" id="standard-basic" label="Academic level" />
-                                    <Button onClick={HandleClick2}
-                                    variant="contained"
-                                    color="primary"
-                                    size="small"
-                                    className={classes.button1}
-                                    startIcon={<SaveIcon />}
-                                >
-                                    Save
-      </Button>
-                                </form>
-                                
-                            </div>
-                        </Fade>
-
-                    </Modal>
+                   
                 </Container>
             </main>
         </div>

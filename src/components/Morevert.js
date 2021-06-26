@@ -9,12 +9,19 @@ import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
+import { Backdrop, Fade, Modal } from '@material-ui/core';
+import Editprofil from '../presidents/Editprofil';
 
 const useStyles = makeStyles((theme) => ({
     more:{
         display: 'flex',
         paddingTop:"2%",
         paddingLeft:"95%",
+    },
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
  
 }));
@@ -52,7 +59,14 @@ export default function MenuListComposition() {
 
     prevOpen.current = open;
   }, [open]);
-
+  const [open1, setOpen1] = React.useState(false);
+  const handleOpen1 = () => {
+      setOpen1(true);
+    };
+    const handleClose1 = () => {
+      setOpen1(false);
+  
+    };
   return (
       <div className={classes.more}>
         <IconButton
@@ -72,15 +86,31 @@ export default function MenuListComposition() {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    <MenuItem onClick={handleOpen1}>Edit Profil</MenuItem>
+                    
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
             </Grow>
           )}
         </Popper>
+        <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open1}
+        onClose={handleClose1}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open1}>
+          <Editprofil/>
+        </Fade>
+
+      </Modal>
       </div>
   );
 }

@@ -29,8 +29,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        UNIV CLUB
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',

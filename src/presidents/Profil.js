@@ -24,6 +24,7 @@ import {MessageOutlined} from '@ant-design/icons';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Feed from './Feed';
 import Card from '../components/Card1';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 
 const theme = createMuiTheme({
@@ -43,16 +44,16 @@ const theme = createMuiTheme({
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="/">
+          UNIV CLUB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     );
-}
+  }
 
 const drawerWidth = 240;
 
@@ -134,6 +135,17 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight1:{
     height:200,
   },
+  view:{
+      display:"flex",
+      alignItems:"center",
+      width:"140px",
+      height:"50px",
+      justifyContent:"space-between"
+  },
+  view1:{
+    display:"flex",
+    justifyContent:"space-between",
+}
    
 }));
 
@@ -158,7 +170,7 @@ const StyledMenu = withStyles({
 ));
 
 
-export default function Clubpresident() {
+export default function Profil() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -213,17 +225,13 @@ export default function Clubpresident() {
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>
-                            <SettingsIcon />
-            Settings
-            </MenuItem>
-                        <MenuItem onClick={logout}>
-                            <ExitToAppIcon />
-            Logout
-            </MenuItem>
+                       <MenuItem onClick={logout}>
+                                <ExitToAppIcon />
+                                Logout
+                            </MenuItem>
                     </StyledMenu>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        CLUB NAME
           </Typography>
                     <IconButton color="inherit">
                         <Badge badgeContent={7} color="primary">
@@ -257,15 +265,65 @@ export default function Clubpresident() {
 
             <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="xl" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Recent Deposits */}
-                <Grid item xs={7}>
 <Feed/>
-
-              </Grid>
               <Grid item xs={5}>
-              <Paper elevation={3} className={fixedHeightPaper}>
+              <Paper elevation={3} className={fixedHeightPaper} style={{display:"flex",flexDirection:"column",}}>
+              <div className={classes.view1}>
+                  <div className={classes.view}>
+                  <Avatar src=""/>
+                  <h6>CLUB NAME</h6>
+                  </div>
+                  <div >
+                  <IconButton>
+                  <VisibilityIcon/>
+                  </IconButton>
+                  </div>
+                  </div>
+                  <div className={classes.view1}>
+                  <div className={classes.view}>
+                  <Avatar src=""/>
+                  <h6>CLUB NAME</h6>
+                  </div>
+                  <div >
+                  <IconButton>
+                  <VisibilityIcon/>
+                  </IconButton>
+                  </div>
+                  </div>
+                  <div className={classes.view1}>
+                  <div className={classes.view}>
+                  <Avatar src=""/>
+                  <h6>CLUB NAME</h6>
+                  </div>
+                  <div >
+                  <IconButton>
+                  <VisibilityIcon/>
+                  </IconButton>
+                  </div>
+                  </div>
+                  <div className={classes.view1}>
+                  <div className={classes.view}>
+                  <Avatar src=""/>
+                  <h6>CLUB NAME</h6>
+                  </div>
+                  <div >
+                  <IconButton>
+                  <VisibilityIcon/>
+                  </IconButton>
+                  </div>
+                  </div><div className={classes.view1}>
+                  <div className={classes.view}>
+                  <Avatar src=""/>
+                  <h6>CLUB NAME</h6>
+                  </div>
+                  <div >
+                  <IconButton>
+                  <VisibilityIcon/>
+                  </IconButton>
+                  </div>
+                  </div>
               </Paper>
               </Grid>
                 <Grid item xs={7}>

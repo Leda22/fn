@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ip from '../images/IPV6.png'
 import B from '../images/p.png'
+import Like from './Liked';
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 350,
@@ -76,9 +77,7 @@ export default function RecipeReviewCard() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
+        <Like/>
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
