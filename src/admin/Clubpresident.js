@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,8 +22,10 @@ import ListItems from './listItems';
 import { Avatar, Backdrop, Button, Fade, FormControlLabel, FormLabel, Menu, MenuItem, Modal, RadioGroup, TextField, withStyles } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmailIcon from '@material-ui/icons/Email';
-import Axios from 'axios';
-import Logo from '../images/p.png';
+import db,{ auth } from '../firebase';
+import { useStateValue } from '../Auth';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';
 import 'antd/dist/antd.css';
 
 
@@ -189,20 +191,6 @@ const StyledMenu = withStyles({
     />
 ));
 
-// Generate Order Data
-function createData(id, logo,name,email, president,date, phone, category) {
-    return { id, logo,name,email, president,date, phone, category};
-  }
-  
-  const rows = [
-    createData(0,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-    createData(1,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-    createData(2,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-    createData(3,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-    createData(4,Logo, 'CLUB NAME', 'PRESIDENT@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  ];
-
-
 export default function Clubpresident() {
     const Swal = require('sweetalert2')
 
@@ -224,16 +212,17 @@ export default function Clubpresident() {
         setAnchorEl(null);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    // eslint-disable-next-line
-    const [loggedIn, setLoggedIn] = useState(false)
+    let history = useHistory()
 
+    const [{ admin, president }, dispatch] = useStateValue()
     const logout = () => {
-        Axios.get('http://localhost:3030/logout').then((response) => {
-            if (response.data.loggedIn === true) {
-                setLoggedIn(false)
-            }
-        })
-    };
+      auth.signOut()
+      dispatch({
+        type:actionTypes.SET_ADMIN,
+        admin: false
+      }),
+      history.push('/login')
+    }
     const [open1, setOpen1] = React.useState(false);
     const [anchorEl1, setAnchorEl1] = React.useState(null);
 
@@ -253,12 +242,12 @@ export default function Clubpresident() {
     const vv = Boolean(anchorEl);
     const id = vv ? 'simple-popper' : undefined;
 
-   
-    const [value, setValue] = React.useState('female');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+    const [clubs, setClubs] = useState([])
+    useEffect(() => {
+        db.collection("Clubs").onSnapshot((snapshot) =>
+            setClubs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+        )
+    }, [])
 
     return (
         <div className={classes.root}>
@@ -327,20 +316,17 @@ export default function Clubpresident() {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
-                        {/* Recent Deposits */}
-                        {rows.map((row) => (
+                        {clubs.map((club) => (
                             <Grid item xs={4} >
                                 <Paper
                                     className={fixedHeightPaper}>
                                     <div className={classes.presdnt}>
-                                        <Avatar src={row.logo} style={{ alignSelf: 'center' }} />
-                                        <h5 style={{ paddingTop: '5%' }}>{row.president}</h5>
-                                        <h6 style={{ paddingTop: '6%' }}>{row.name}</h6>
+                                        <Avatar src={club.data.logo} style={{ alignSelf: 'center' }} />
+                                        <h5 style={{ paddingTop: '5%' }}>{club.data.firstname+" "+club.data.lastname}</h5>
+                                        <h6 style={{ paddingTop: '6%' }}>{club.data.clubname}</h6>
                                         <p style={{color:"grey"}}>PRESIDENT CLUB</p>
-                                        <h6 style={{ paddingTop: '6%' }}>{row.email}</h6>
-                                        <h6 style={{ paddingTop: '2%' }}>{row.phone}</h6>
-
-
+                                        <h6 style={{ paddingTop: '6%' }}>{club.data.presidentemail}</h6>
+                                        <h6 style={{ paddingTop: '2%' }}>{club.data.presidentphone}</h6>
                                     </div>
                                 </Paper>
                             </Grid>

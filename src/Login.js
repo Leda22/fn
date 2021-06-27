@@ -8,15 +8,13 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import Logo from "./images/login.svg";
 import Log from "./images/login.png";
-import Axios from 'axios'
-import {useHistory} from 'react-router-dom'
+import { auth, provider } from './firebase';
+import { actionTypes } from './reducer';
+import { useHistory } from 'react-router-dom';
 import Header from "./components/Header";
+import { useStateValue } from "./Auth";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -103,38 +101,36 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = React.useState('')
-  // eslint-disable-next-line
-  const [login, setLogin] = useState("")
+  const [{user},dispatch] = useStateValue()
 
   let history = useHistory()
 
-  Axios.defaults.withCredentials = true
-  const signIn = (event) => {
+  const signIn =(event)=>{
     event.preventDefault()
-    Axios.post('http://localhost:3030/login', {
-      username: username,
-      password: password,
-      role: role
-    })
-       if ({role:'admin'})
-       { return history.push('/admin') } 
-       if ({role:'president'}) 
-       { return history.push('/president') } 
-       else { return history.push('/login') } 
-    
-  }
-
-  
-  useEffect(() => {
-    Axios.get('http://localhost:3030/login').then((response) => {
-      if (response.data.loggedIn === true) {
+    auth.signInWithEmailAndPassword(email,password).then((result)=>{
+      if(email == 'abc@abc.com' && password == '456123123'){
+        dispatch({
+          type:actionTypes.SET_ADMIN,
+          user: result.user,
+          president:false,
+          admin: true
+        })
         history.push('/admin')
       }
+      else {
+        dispatch({
+          type:actionTypes.SET_PRES,
+          user: result.user,
+          president:true,
+          admin: false
+        })
+        history.push('/profil')
+      }
     })
-  }, [history])
+  }
+
   return (
     <Grid container component="main" className={classes.root} >
       <Header/>
@@ -152,8 +148,8 @@ export default function Login() {
             <TextField
               variant="outlined"
               type='text'
-              placeholder='Username'
-              onChange={(e) => { setUsername(e.target.value) }}
+              placeholder='Club Email'
+              onChange={(e) => { setEmail(e.target.value) }}
             />
             <TextField
               variant="outlined"
@@ -162,17 +158,6 @@ export default function Login() {
               autoComplete="true"
               onChange={(e) => { setPassword(e.target.value) }}
             />
-
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel >who are you ?</InputLabel>
-              <Select
-                value={role}
-                onChange={(e) => { setRole(e.target.value) }}
-              >
-                <MenuItem value={'admin'}>Admin</MenuItem>
-                <MenuItem value={'president'}>President</MenuItem>
-              </Select>
-            </FormControl>
             <Button
               type="submit"
               fullWidth
@@ -184,10 +169,8 @@ export default function Login() {
             >
               Sign In
             </Button>
-            </form>
-
-            <h1> {login} </h1>
             <Copyright />
+          </form>
         </div>
       </Grid>
     </Grid>

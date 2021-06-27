@@ -27,6 +27,11 @@ import Card from '../components/Card1';
 import { CalendarToday} from '@material-ui/icons';
 import PhoneIcon from '@material-ui/icons/Phone';
 import RoomIcon from '@material-ui/icons/Room';
+import { useStateValue } from '../Auth';
+import { auth } from '../firebase';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';
+
 
 const theme = createMuiTheme({
     palette: {
@@ -211,16 +216,16 @@ export default function Profiluser() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // eslint-disable-next-line
-    const [loggedIn, setLoggedIn] = useState(false)
-
+    let history = useHistory()
+    const [{ admin, president }, dispatch] = useStateValue()
     const logout = () => {
-        Axios.get('http://localhost:3030/logout').then((response) => {
-            if (response.data.loggedIn === true) {
-                setLoggedIn(false)
-            }
-        })
-    };
+        auth.signOut()
+        dispatch({
+            type: actionTypes.SET_PRES,
+            president: false
+        }),
+            history.push('/login')
+    }
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const user = clsx(classes.Grid, classes.user);
 

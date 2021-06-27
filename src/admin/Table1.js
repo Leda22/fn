@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -6,8 +6,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import { Avatar,  makeStyles } from '@material-ui/core';
-import Logo from '../images/p.png';
 import { fade } from '@material-ui/core/styles';
+import db from '../firebase';
 
 
 
@@ -91,54 +91,42 @@ flexDirection:"column"
   },
 }));
 
-// Generate Order Data
-function createData(id, logo,name,email, president,date, phone, category) {
-  return { id, logo,name,email, president,date, phone, category};
-}
-
-const rows = [
-  createData(0,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(1,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(2,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(3,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(4,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-];
-
-
-
-
 export default function Table1() {
   const classes = useStyles();
   
-
+  const [clubs, setClubs] = useState([])
+  useEffect(() => {
+    db.collection("Clubs").onSnapshot((snapshot) =>
+      setClubs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+    )
+  }, [])
   return (
     <React.Fragment>
-      <Title>Recent Orders</Title>
+      <Title>CLUBS</Title>
       <Table size="medium">
         <TableHead>
           <TableRow>
             <TableCell>Clubs</TableCell>
             <TableCell>Club Name</TableCell>
-            <TableCell>Email</TableCell>
+            <TableCell>Club Email</TableCell>
             <TableCell>Club President</TableCell>
             <TableCell>Created At</TableCell>
-            <TableCell >Phone Number</TableCell>
+            <TableCell >Club Phone Number</TableCell>
             <TableCell >Category</TableCell>
-            
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {clubs.map((club) => (
+            <TableRow key={club.id}>
               <TableCell>
-                <Avatar src={row.logo}/>
-                </TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell>{row.president}</TableCell>
-              <TableCell>{row.date}</TableCell>
-              <TableCell >{row.phone}</TableCell>
-              <TableCell >{row.category}</TableCell>
+                <Avatar width='100px' height='100px' src={club.data.logo} />
+              </TableCell>
+              <TableCell>{club.data.clubname}</TableCell>
+              <TableCell>{club.data.clubemail}</TableCell>
+              <TableCell>{club.data.firstname + " " + club.data.lastname}</TableCell>
+              <TableCell>{club.data.createdAt}</TableCell>
+              <TableCell>{club.data.clubphone}</TableCell>
+              <TableCell>{club.data.clubType}</TableCell>
             </TableRow>
           ))}
         </TableBody>

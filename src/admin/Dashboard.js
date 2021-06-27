@@ -27,8 +27,10 @@ import SchoolIcon from '@material-ui/icons/School';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EventIcon from '@material-ui/icons/Event';
 import Sliderr from '../components/Sliderr';
-import Axios from 'axios';
-
+import { auth } from '../firebase';
+import { useStateValue } from '../Auth';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';
 
 
 function Copyright() {
@@ -178,17 +180,16 @@ export default function Dashboard() {
   const fixedHeightGrid = clsx(classes.Grid, classes.fixedHeight);
   const fixedHeight1Grid = clsx(classes.Grid, classes.fixedHeight1);
 
+  let history = useHistory()
 
-
-  // eslint-disable-next-line
-  const [loggedIn, setLoggedIn] = useState(false)
-
+  const [{ admin, president }, dispatch] = useStateValue()
   const logout = () => {
-    Axios.get('http://localhost:3030/logout').then((response) => {
-      if (response.data.loggedIn === true) {
-        setLoggedIn(false)
-      }
-    })
+    auth.signOut()
+    dispatch({
+      type:actionTypes.SET_ADMIN,
+      admin: false
+    }),
+    history.push('/login')
   }
   return (
     <div className={classes.root}>

@@ -152,22 +152,6 @@ export default function Home() {
                         social activities clubs,
                         political and religious clubs, and so forth...
                 </p>
-                    {/* upload button */}
-                    {/* <input
-                    accept="image/*"
-                    className={classes.input}
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                />
-                <label htmlFor="contained-button-file">
-                    <Button variant="contained" component="spanS" classes={{
-                            root: classes.btn
-                        }} >
-                        Upload
-                    </Button>
-                </label> */}
-
                     <Button
                           component={Link} to="/learn"
 
@@ -179,8 +163,6 @@ export default function Home() {
                     >
                         Learn More
                 </Button>
-
-
                 </div>
                 <div className={classes.right}>
                     <img className={classes.bg} src={bg} alt="" />
@@ -190,7 +172,6 @@ export default function Home() {
             <div className={classes.main}>
                 <div className={classes.left}>
                     <img className={classes.tsk} src={tsk} alt="" />
-
                 </div>
                 <div className={classes.right}>
                     <h1 className={classes.header}>Our Clubs</h1>

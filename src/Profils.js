@@ -13,7 +13,7 @@ import Members from './presidents/Members';
 import Chatclub from './presidents/Chatclub';
 import Registrations from './presidents/Registrations';
 
-
+ 
 function Profils() {
     return (
         <Router>
@@ -24,12 +24,6 @@ function Profils() {
         <Route exact path="/profil/Members" component={Members}/>
         <Route exact path="/profil/chat" component={Chatclub}/>
         <Route exact path="/profil/registrations" component={Registrations}/>
-
-
-
-
-
-
         </Switch>
     </Router>
     )

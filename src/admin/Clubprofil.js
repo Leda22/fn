@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,8 +22,10 @@ import ListItems from './listItems';
 import { Avatar, Backdrop, Button, Fade, Menu, MenuItem, Modal, TextField, withStyles } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmailIcon from '@material-ui/icons/Email';
-import Axios from 'axios';
-import Logo from '../images/p.png';
+import db, { auth } from '../firebase';
+import { useStateValue } from '../Auth';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';import Logo from '../images/p.png';
 import SaveIcon from '@material-ui/icons/Save';
 import swal from 'sweetalert';
 import 'antd/dist/antd.css';
@@ -201,20 +203,6 @@ const StyledMenu = withStyles({
     />
 ));
 
-// Generate Order Data
-function createData(id, logo, name, email, president, date, phone, category) {
-    return { id, logo, name, email, president, date, phone, category };
-}
-
-const rows = [
-    createData(0, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
-    createData(1, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
-    createData(2, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
-    createData(3, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
-    createData(4, Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019', '+213 0541807279', "Scientific"),
-];
-
-
 export default function Clubprofil() {
 
 
@@ -236,16 +224,17 @@ export default function Clubprofil() {
         setAnchorEl(null);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    // eslint-disable-next-line
-    const [loggedIn, setLoggedIn] = useState(false)
+    let history = useHistory()
 
+    const [{ admin, president }, dispatch] = useStateValue()
     const logout = () => {
-        Axios.get('http://localhost:3030/logout').then((response) => {
-            if (response.data.loggedIn === true) {
-                setLoggedIn(false)
-            }
-        })
-    };
+      auth.signOut()
+      dispatch({
+        type:actionTypes.SET_ADMIN,
+        admin: false
+      }),
+      history.push('/login')
+    }
     const [open1, setOpen1] = React.useState(false);
     const [anchorEl1, setAnchorEl1] = React.useState(null);
 
@@ -269,6 +258,12 @@ export default function Clubprofil() {
         swal("Good job!", "You clicked the button!", "success");
     };
 
+    const [clubs, setClubs] = useState([])
+    useEffect(() => {
+        db.collection("Clubs").onSnapshot((snapshot) =>
+            setClubs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+        )
+    }, [])
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -337,32 +332,23 @@ export default function Clubprofil() {
                 <Container maxWidth="xl" className={classes.container}>
                     <Grid container spacing={3}>
                         {/* Recent Deposits */}
-                        {rows.map((row) => (
+                        {clubs.map((club) => (
                             <Grid item xs={4}>
-
-
                                 <Paper elevation={3}
+                                key={club.id}
                                     className={classes.paper}>
-
-
                                     <div className={classes.presdnt}>
-                                        <Avatar className={classes.large} src={row.logo} style={{ alignSelf: 'center' }} />
-
-
-                                        <h5 style={{ paddingTop: '10%', color: "white" }}>{row.name}</h5>
+                                        <Avatar className={classes.large} src={club.data.logo} style={{ alignSelf: 'center' }} />
+                                        <h5 style={{ paddingTop: '10%', color: "white" }}>{club.data.clubname}</h5>
                                         <p style={{ color: "white", alignSelf: 'center' ,paddingBottom:"30%"}}>CLUB</p>
                                         <Button  variant="contained" color="primary" href="/@username">
                                           SEE PROFIL
                                         </Button>
                                     </div>
                                 </Paper>
-
-
                             </Grid>
                         ))}
                     </Grid>
-
-
                     <Box pt={4}>
                         <Copyright />
                     </Box>
@@ -384,8 +370,8 @@ export default function Clubprofil() {
                                 <h2 style={{ textAlign: 'center' }}>ADD PRESIDENT CLUB</h2>
                                 <form className={classes.form1} noValidate autoComplete="off">
                                     <div className={classes.first1}>
-                                        <TextField type="text" id="standard-basic" label="First Name" />
-                                        <TextField type="text" id="standard-basic" label="Last Name" />
+                                        <TextField type="text" label="First Name" />
+                                        <TextField type="text" label="Last Name" />
                                     </div>
                                     <TextField
                                         id="date"
@@ -396,13 +382,13 @@ export default function Clubprofil() {
                                             shrink: true,
                                         }}
                                     />
-                                    <TextField type="text" id="standard-basic" label="City" />
-                                    <TextField type="email" id="standard-basic" label="Email" />
-                                    <TextField type="number" id="standard-basic" label="Phone Number" />
-                                    <TextField type="text" id="standard-basic" label="University" />
-                                    <TextField type="text" id="standard-basic" label="The College" />
-                                    <TextField type="text" id="standard-basic" label="Academic level" />
-                                    <TextField id="standard-basic" label="Academic level" />
+                                    <TextField type="text" label="City" />
+                                    <TextField type="email" label="Email" />
+                                    <TextField type="tel" label="Phone Number" />
+                                    <TextField type="text" label="University" />
+                                    <TextField type="text" label="The College" />
+                                    <TextField type="text" label="Academic level" />
+                                    <TextField label="Academic level" />
 
                                     <Button onClick={HandleClick2}
                                         variant="contained"

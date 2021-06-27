@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -6,20 +6,21 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Modal from '@material-ui/core/Modal';
-import { Avatar, Fab, Fade, IconButton, makeStyles} from '@material-ui/core';
-import Logo from '../images/p.png';
+import { Avatar, Button, createChainedFunction, Fab, Fade, IconButton, makeStyles, TextField } from '@material-ui/core';
+import logo from '../images/p.png';
 import EditIcon from '@material-ui/icons/Edit';
 import Backdrop from '@material-ui/core/Backdrop';
+import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
+import Popper from '@material-ui/core/Popper';
 import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import Steper from '../components/Steper';
-import Confirm from '../components/Confirm';
-
-
-
-
+import SteperUpdate from '../components/SteperUpdate';
+import { Popconfirm, message } from 'antd';
+import DeleteIcon from '@material-ui/icons/Delete'; 
+import db from '../firebase';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   ttl: {
     display: "flex",
     alignItems: "center",
@@ -77,38 +78,14 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  
+
 }));
 
-
-
-// Generate Order Data
-function createData(id, logo,name,email, president,date, phone, category) {
-  return { id, logo,name,email, president,date, phone, category};
-}
-
-const rows = [
-  createData(0,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(1,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(2,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(3,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-  createData(4,Logo, 'CLUB NAME', 'CLUB@gmail.com', 'CLUB PRESIDENT NAME', '16 Mar, 2019','+213 0541807279',"Scientific"),
-];
-
-
-
-
-export default function UsersTable() {
+export default function Users() {
   const classes = useStyles();
-  const [open, setOpen1] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open2, setOpen2] = React.useState(false);
-
-
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
+  const [open, setOpen1] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open2, setOpen2] = useState(false);
 
   const handleOpen1 = () => {
     setOpen1(true);
@@ -121,21 +98,26 @@ export default function UsersTable() {
   const vv = Boolean(anchorEl);
   const id = vv ? 'simple-popper' : undefined;
   const handleOpen2 = () => {
-    setOpen2(true);
+    setOpen2(true)
   };
 
   const handleClose2 = () => {
     setOpen2(false);
 
   };
-  const [value, setValue] = React.useState('female');
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
+  const [clubs, setClubs] = useState([])
+  useEffect(() => {
+    db.collection("Clubs").onSnapshot((snapshot) =>
+      setClubs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+    )
+  }, [])
+  function cancel(e) {
+    e.preventDefault()
+    message.error('Click on No');
+  }
   return (
-    <div>
+    <React.Fragment>
       <div className={classes.ttl}>
         <Title>CLUBS</Title>
         <div className={classes.search}>
@@ -156,41 +138,47 @@ export default function UsersTable() {
         </Fab>
       </div>
 
-
       <Table size="medium">
         <TableHead>
           <TableRow>
             <TableCell>Clubs</TableCell>
             <TableCell>Club Name</TableCell>
-            <TableCell>Email</TableCell>
+            <TableCell>Club Email</TableCell>
             <TableCell>Club President</TableCell>
             <TableCell>Created At</TableCell>
-            <TableCell >Phone Number</TableCell>
+            <TableCell >Club Phone Number</TableCell>
             <TableCell >Category</TableCell>
             <TableCell >Edit/Del</TableCell>
-
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {clubs.map((club) => (
+            <TableRow key={club.id}>
               <TableCell>
-                <Avatar src={row.logo} />
+                <Avatar width='100px' height='100px' src={club.data.logo} />
               </TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell>{row.president}</TableCell>
-              <TableCell>{row.date}</TableCell>
-              <TableCell >{row.phone}</TableCell>
-              <TableCell >{row.category}</TableCell>
+              <TableCell>{club.data.clubname}</TableCell>
+              <TableCell>{club.data.clubemail}</TableCell>
+              <TableCell>{club.data.firstname + " " + club.data.lastname}</TableCell>
+              <TableCell>{club.data.createdAt}</TableCell>
+              <TableCell>{club.data.clubphone}</TableCell>
+              <TableCell>{club.data.clubType}</TableCell>
               <TableCell >
-                <IconButton onClick={handleOpen1}><EditIcon /></IconButton>
-
-                
-               <Confirm/>
+                <Button onClick={handleOpen1}><EditIcon /></Button>
+                <Popconfirm
+                  title="Are you sure to delete this task?"
+                  onConfirm={(e) => {
+                    e.preventDefault()
+                    db.collection('Clubs').doc(club.data.clubname).delete()
+                    message.success('Click on Yes')
+                  }}
+                  onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button><DeleteIcon color="Error" /></Button>
+                </Popconfirm>
               </TableCell>
-
-
             </TableRow>
           ))}
         </TableBody>
@@ -208,7 +196,7 @@ export default function UsersTable() {
         }}
       >
         <Fade in={open}>
-          <Steper/>
+          <SteperUpdate />
         </Fade>
 
       </Modal>
@@ -225,11 +213,11 @@ export default function UsersTable() {
         }}
       >
         <Fade in={open2}>
-        <Steper/>
+          <Steper />
         </Fade>
 
       </Modal>
-    
-      </div>
+    </React.Fragment>
+
   );
 }

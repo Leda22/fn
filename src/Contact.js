@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import RoomIcon from '@material-ui/icons/Room';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
@@ -8,10 +8,8 @@ import imag from "./images/contact.png";
 import Header from './components/Header';
 import Paper from '@material-ui/core/Paper';
 import Footer from './components/Footer';
-import Alert from '@material-ui/lab/Alert';
-
-
-
+import db from './firebase';
+import swal from 'sweetalert';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,8 +19,6 @@ const useStyles = makeStyles((theme) => ({
             display: "flex",
             width: "50ch"
         },
-
-
     },
     main0: {
         backgroundColor: "#020c0f"
@@ -32,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-around",
         alignItems: "center",
         paddingBottom: "10%"
-
     },
 
     paper: {
@@ -67,26 +62,26 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: "5%"
     },
     form: {
-       
+
         "& label.Mui-focused": {
-          color: "#336699"
+            color: "#336699"
         },
         "& .MuiInput-underline:after": {
-          borderBottomColor: "#336699"
+            borderBottomColor: "#336699"
         },
         "& .MuiOutlinedInput-root": {
-          "& fieldset": {
-            borderColor: "#336699"
-          },
-          "&:hover fieldset": {
-            borderColor: "#336699"
-          },
-          "&.Mui-focused fieldset": {
-            borderColor: "#336699"
-          }
+            "& fieldset": {
+                borderColor: "#336699"
+            },
+            "&:hover fieldset": {
+                borderColor: "#336699"
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#336699"
+            }
         }
-      },
-      submit: {
+    },
+    submit: {
         width: "50%",
         marginLeft: "25%",
         marginTop: "10px",
@@ -98,18 +93,30 @@ const useStyles = makeStyles((theme) => ({
         height: 48,
         padding: "0px 30px",
         boxShadow: "0 3px 5px 2px rgba(0,0,0,0.15)",
-      },
+    },
 
 }));
-const handleClick = () => {
-    <Alert variant="filled" severity="success">
-    This is a success alert — check it out!
-  </Alert>
-  }
+
 
 export default function Contact() {
     const classes = useStyles();
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [message, setMessage] = useState('')
 
+
+
+    function SendMessage(e) {
+        e.preventDefault()
+        db.collection('ContactUs').add({
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            message: message,
+        })
+        swal("Message Sent Successfully")
+    }
     return (
         <div className={classes.main0} >
             <Header />
@@ -118,27 +125,50 @@ export default function Contact() {
             <div className={classes.icons}>
                 <div>
                     <RoomIcon /> Faculty of Exact Sciences
-            </div>
+                </div>
                 <div>
                     <PhoneIcon /> +213 0541807279
-            </div>
+                </div>
                 <div>
                     <EmailIcon /> Exemple@gmai.com
-            </div>
+                </div>
             </div>
             <div className={classes.main}>
                 <Paper elevation={3} className={classes.paper} >
                     <div className={classes.right}>
                         <h2 className={classes.title2} >CONTACT US</h2>
                         <form className={classes.root} Validate autoComplete="off">
-                            <TextField type="text" label="First Name" variant="outlined" required />
-                            <TextField type="text" label="Last Name" variant="outlined" required />
-                            <TextField type="email" label="Email" variant="outlined" required/>
+                            <TextField
+                                required
+                                type="text"
+                                label="First Name"
+                                value={firstName}
+                                onChange={(e) => { setFirstName(e.target.value) }}
+                            />
+                            <TextField
+                                required
+                                type="text"
+                                label="Last Name"
+                                value={lastName}
+                                onChange={(e) => { setLastName(e.target.value) }}
+                            />
+                            <TextField
+                                required
+                                type="email"
+                                label="Member Email"
+                                value={email}
+                                onChange={(e) => { setEmail(e.target.value) }}
+                            />
                             <TextField type="text"
                                 multiline
                                 rows={7}
-                                label="Message" variant="outlined" required/>
-                            <Button onClick={handleClick}
+                                label="Message" 
+                                variant="outlined" 
+                                required
+                                value={message}
+                                onChange={(e) => { setMessage(e.target.value) }} />
+
+                            <Button onClick={SendMessage}
                                 type="submit"
                                 fullWidth
                                 variant="contained"
@@ -147,7 +177,7 @@ export default function Contact() {
                                 }}
                             >
                                 SEND
-            </Button>
+                            </Button>
                         </form>
                     </div>
                 </Paper>

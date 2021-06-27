@@ -1,21 +1,22 @@
-import firebase, { firestore } from 'firebase';
+import firebase from "firebase";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyCiTExV0-2SKc-3161NCOem3bA62xjkAns',
-  authDomain: 'fb-clone-963d8.firebaseapp.com',
-  databaseURL: 'https://fb-clone-963d8.firebaseio.com',
-  projectId: 'fb-clone-963d8',
-  storageBucket: 'fb-clone-963d8.appspot.com',
-  messagingSenderId: '98823945221',
-  appId: '1:98823945221:web:98b9759c045eb193f9706c',
-  measurementId: 'G-QLLL67JQPL',
-};
-
+    apiKey: "AIzaSyDjCRyqTSEMzA0W0T3RMUiXzTRifekqgIk",
+    authDomain: "prog-e9a07.firebaseapp.com",
+    projectId: "prog-e9a07",
+    storageBucket: "prog-e9a07.appspot.com",
+    messagingSenderId: "514538620599", 
+    appId: "1:514538620599:web:5164b9950cbcb99b1c2f32"
+  };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
 
-export { auth, provider };
+const auth = firebase.auth(); 
+const db = firebaseApp.firestore();
+const storage = firebaseApp.storage();
+const provider = new firebase.auth.GoogleAuthProvider()
+
+export {auth, provider,storage}
 export default db;

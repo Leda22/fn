@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -6,6 +6,7 @@ import Card from './Card';
 import './slick-carousel.css';
 import './slick.css';
 import './slick-theme.css';
+import db from '../firebase';
 
 const styles = ({
   item: {
@@ -16,44 +17,40 @@ const styles = ({
   }
 });
 
-class Carouselevent extends React.Component {
-  render() {
-    const { classes } = this.props;
+const Carouselevent =()=> {
     const settings = {
       infinite: true,
       centerMode: false,
       speed: 500,
-      autoplaySpeed: 2000,
+      autoplaySpeed: 4000,
       pauseOnHover: true,
       autoplay: true,
       slidesToShow: 3,
       slidesToScroll: 1,
       cssEase: 'ease-out'
     };
+    const [posts, setPosts] = useState([])
+    useEffect(() => {
+      db.collection("Posts").onSnapshot((snapshot) =>
+        setPosts(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))))
+    }, [])
     return (
-      <div className="container">
         <Slider {...settings}>
-         
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-              <Card/>
-          
+          {posts.map((post) => (
+            <Card
+              key={post.id}
+              logo={post.data.logo}
+              message={post.data.message}
+              timestamp={post.data.timestamp}
+              clubname={post.data.clubname}
+              image={post.data.image}
+            />
+          ))}
         </Slider>
-      </div>
     );
-  }
+  
 }
 
-Carouselevent.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+
 
 export default withStyles(styles)(Carouselevent);

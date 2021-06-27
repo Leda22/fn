@@ -37,6 +37,7 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
 import Create from '@material-ui/icons/Create';
 
 import { appointments } from './appointments';
+import db from '../../firebase';
 
 const containerStyles = theme => ({
   container: {
@@ -123,10 +124,12 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     };
     if (type === 'deleted') {
       commitChanges({ [type]: appointment.id });
+      
     } else if (type === 'changed') {
       commitChanges({ [type]: { [appointment.id]: appointment } });
     } else {
       commitChanges({ [type]: appointment });
+      
     }
     this.setState({
       appointmentChanges: {},
@@ -144,7 +147,6 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       onHide,
     } = this.props;
     const { appointmentChanges } = this.state;
-
     const displayAppointmentData = {
       ...appointmentData,
       ...appointmentChanges,
@@ -152,8 +154,12 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 
     const isNewAppointment = appointmentData.id === undefined;
     const applyChanges = isNewAppointment
-      ? () => this.commitAppointment('added')
-      : () => this.commitAppointment('changed');
+      ? () => {this.commitAppointment('added')
+      db.collection('Date').doc(displayAppointmentData.title)
+      .set(displayAppointmentData)}
+
+      : () => this.commitAppointment('changed')
+      
 
     const textEditorProps = field => ({
       variant: 'outlined',
@@ -185,6 +191,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       visibleChange();
       cancelAppointment();
     };
+    
 
     return (
       <AppointmentForm.Overlay
@@ -193,7 +200,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
         fullSize
         onHide={onHide}
       >
-        <div>
+        <div> 
           <div className={classes.header}>
             <IconButton
               className={classes.closeButton}
@@ -245,7 +252,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 className={classes.button}
                 onClick={() => {
                   visibleChange();
-                  this.commitAppointment('deleted');
+                  this.commitAppointment('deleted')
                 }}
               >
                 Delete
@@ -258,6 +265,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
               onClick={() => {
                 visibleChange();
                 applyChanges();
+                
               }}
             >
               {isNewAppointment ? 'Create' : 'Save'}
@@ -394,6 +402,7 @@ class Demo extends React.PureComponent {
       if (changed) {
         data = data.map(appointment => (
           changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+
       }
       if (deleted !== undefined) {
         this.setDeletedAppointmentId(deleted);

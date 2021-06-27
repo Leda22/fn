@@ -14,36 +14,36 @@ import clsx from 'clsx';
 import swal from 'sweetalert';
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper1: {
-    padding: theme.spacing(3),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    height:600,
-},
-
-form1: {
-    '& > *': {
-        margin: theme.spacing(2),
-        width: "40ch"
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    display: "flex",
-    flexDirection: "column"
-},
+    paper1: {
+        padding: theme.spacing(3),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        height: 600,
+    },
 
-first1: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-},
-fixedHeight: {
-    height: 600,
-},
+    form1: {
+        '& > *': {
+            margin: theme.spacing(2),
+            width: "40ch"
+        },
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    first1: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    fixedHeight: {
+        height: 600,
+    },
 }));
 
 export default function Editmember() {
@@ -53,48 +53,48 @@ export default function Editmember() {
     const handleChange = (event) => {
         setValue(event.target.value);
     };
-  function sayHello() {
-    swal("Thank You", "Changed successfully", "success");
-  };
-  return (
+    function sayHello() {
+        swal("Thank You", "Changed successfully", "success");
+    };
+    return (
         <Grid>
-                    <Paper className={classes.paper1} >
-                        <h3 style={{ textAlign: 'center' }}>EDIT CLUB MEMBER </h3>
-                        <form className={classes.form1} noValidate autoComplete="off">
-                            <div className={classes.first1}>
-                                <TextField type="text" id="standard-basic" label="First Name" />
-                                <TextField type="text" id="standard-basic" label="Last Name" />
-                            </div>
-                            <TextField
-                                id="date"
-                                label="Birthday"
-                                type="date"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Gender</FormLabel>
-                                <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                </RadioGroup>
-                            </FormControl>
-                            <TextField type="text" id="standard-basic" label="City" />
-                            <TextField type="email" id="standard-basic" label="Email" />
-                            <MuiPhoneNumber id="standard-basic" defaultCountry={'dz'} label="Phone number" />,
-                            <TextField type="text" id="standard-basic" label="University" />
-                            <TextField type="text" id="standard-basic" label="The College" />
-                            <TextField type="text" id="standard-basic" label="Academic level" />
-                            <Button variant="contained" size="large" color="primary" onClick={sayHello}>
-                                SAVE
-                            </Button>
+            <Paper className={classes.paper1} >
+                <h3 style={{ textAlign: 'center' }}>EDIT CLUB MEMBER </h3>
+                <form className={classes.form1} noValidate autoComplete="off">
+                    <div className={classes.first1}>
+                        <TextField type="text" id="standard-basic" label="First Name" />
+                        <TextField type="text" id="standard-basic" label="Last Name" />
+                    </div>
+                    <TextField
+                        id="date"
+                        label="Birthday"
+                        type="date"
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <FormControl component="fieldset">
+                        <FormLabel component="legend">Gender</FormLabel>
+                        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+                            <FormControlLabel value="female" control={<Radio />} label="Female" />
+                            <FormControlLabel value="male" control={<Radio />} label="Male" />
+                        </RadioGroup>
+                    </FormControl>
+                    <TextField type="text" id="standard-basic" label="City" />
+                    <TextField type="email" id="standard-basic" label="Email" />
+                    <MuiPhoneNumber id="standard-basic" defaultCountry={'dz'} label="Phone number" />,
+                    <TextField type="text" id="standard-basic" label="University" />
+                    <TextField type="text" id="standard-basic" label="The College" />
+                    <TextField type="text" id="standard-basic" label="Academic level" />
+                    <Button variant="contained" size="large" color="primary" onClick={sayHello}>
+                        SAVE
+                    </Button>
 
-                        </form>
+                </form>
 
-                    </Paper>
-                </Grid>
-       
-  );
+            </Paper>
+        </Grid>
+
+    );
 }

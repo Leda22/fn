@@ -14,32 +14,32 @@ import clsx from 'clsx';
 import swal from 'sweetalert';
 
 const useStyles = makeStyles((theme) => ({
-  
-  paper1: {
-    padding: theme.spacing(3),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    height:600,
-},
 
-form1: {
-    '& > *': {
-        margin: theme.spacing(2),
-        width: "40ch"
+    paper1: {
+        padding: theme.spacing(3),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        height: 600,
     },
-    display: "flex",
-    flexDirection: "column"
-},
 
-first1: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-},
-fixedHeight: {
-    height: 600,
-},
+    form1: {
+        '& > *': {
+            margin: theme.spacing(2),
+            width: "40ch"
+        },
+        display: "flex",
+        flexDirection: "column"
+    },
+
+    first1: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    fixedHeight: {
+        height: 600,
+    },
 }));
 
 export default function Editprofil() {
@@ -49,30 +49,30 @@ export default function Editprofil() {
     const handleChange = (event) => {
         setValue(event.target.value);
     };
-  function sayHello() {
-    swal("Thank You", "Changed successfully", "success");
-  };
-  return (
+    function sayHello() {
+        swal("Thank You", "Changed successfully", "success");
+    };
+    return (
         <Grid>
-                    <Paper className={classes.paper1} >
-                        <h3 style={{ textAlign: 'center' }}>EDIT PROFILE </h3>
-                        <form className={classes.form1} Validate autoComplete="off">
-                                <TextField type="text" id="standard-basic" label="Club Name" required />
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Upload Logo</FormLabel>
-                                <input type="file" required/>
-                            </FormControl>
-                            <TextField type="password" id="standard-basic" label="Change Password" required />
-                            <TextField type="email" id="standard-basic" label="Change Email"  required/>
-                            <MuiPhoneNumber id="standard-basic" defaultCountry={'dz'} label=" Change Phone Number"  required/>
-                            <Button variant="contained" type="submit" size="large" color="primary" onClick={sayHello}>
-                                SAVE
-                            </Button>
+            <Paper className={classes.paper1} >
+                <h3 style={{ textAlign: 'center' }}>EDIT PROFILE </h3>
+                <form className={classes.form1} Validate autoComplete="off">
+                    <TextField type="text" id="standard-basic" label="Club Name" required />
+                    <FormControl component="fieldset">
+                        <FormLabel component="legend">Upload Logo</FormLabel>
+                        <input type="file" required />
+                    </FormControl>
+                    <TextField type="password" id="standard-basic" label="Change Password" required />
+                    <TextField type="email" id="standard-basic" label="Change Email" required />
+                    <MuiPhoneNumber id="standard-basic" defaultCountry={'dz'} label=" Change Phone Number" required />
+                    <Button variant="contained" type="submit" size="large" color="primary" onClick={sayHello}>
+                        SAVE
+                    </Button>
 
-                        </form>
+                </form>
 
-                    </Paper>
-                </Grid>
-       
-  );
+            </Paper>
+        </Grid>
+
+    );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -9,6 +9,8 @@ import logo from './images/p.png';
 import 'antd/dist/antd.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { useStateValue } from './Auth';
+import db from './firebase';
 
 const drawerWidth = 240;
 
@@ -62,32 +64,17 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-
-
-// Generate Order Data
-function createData(id, logo, date, name, shipTo, paymentMethod, amount) {
-    return { id, logo, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-    createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 'BADRAT KHAYR'),
-    createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 'UTC'),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 'ECO CRAFT'),
-    createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-
-
-];
-
-
 export default function Clubs() {
 
     const classes = useStyles();
-
+    const [{ user }, dispatch] = useStateValue()
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+    const [clubs, setClubs] = useState([])
+    useEffect(() => {
+        db.collection("Clubs").onSnapshot((snapshot) =>
+            setClubs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+        )
+    }, [])
 
     return (
         <div className={classes.main}>
@@ -97,16 +84,15 @@ export default function Clubs() {
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="xl" className={classes.container}>
                         <Grid container spacing={3}>
-                            {/* Recent Deposits */}
-                            {rows.map((row) => (
+                            {clubs.map((club) => (
                                 <Grid item xs={4} >
                                     <Paper elevation={3}
                                         className={classes.paper}>
                                         <div className={classes.presdnt}>
-                                            <Avatar className={classes.large} src={logo} style={{ alignSelf: 'center' }} />
-                                            <h3 style={{color:'white', paddingTop: '6%', textAlign:'center',fontFamily:"Time New Roman" }}>{row.paymentMethod}</h3>
+                                            <Avatar className={classes.large} src={club.data.logo} style={{ alignSelf: 'center' }} />
+                                            <h3 style={{color:'white', paddingTop: '6%', textAlign:'center',fontFamily:"Time New Roman" }}>{club.data.clubname}</h3>
                                             <p style={{ color:'white', textAlign:'center',fontFamily:"Time New Roman"  }}>CLUB</p>
-                                            <Button size="large" variant="outlined" color="primary" href="/@username">
+                                            <Button key={club.id} size="large" variant="outlined" color="primary" href="/@username">
                                                 SEE PROFIL
                                             </Button>
                                         </div>

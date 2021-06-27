@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import './index.css'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
+import { Auth } from "./Auth";
+import reducer, { initialState } from "./reducer";
 
 ReactDOM.render(
-  <App />,
+  <Auth initialState={initialState} reducer={reducer} >
+    <App />,
+  </Auth>,
   document.getElementById("root")
 );

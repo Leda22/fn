@@ -1,15 +1,19 @@
 import React from 'react';
 import { Popconfirm, message } from 'antd';
-import { Button, IconButton } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import db, { auth } from '../firebase';
 
 
 function confirm(e) {
-  console.log(e);
+  e.preventDefault()
+  db.collection('Clubs').doc().delete();
+  message.success('Click on Yes')
 }
 
 function cancel(e) {
-  console.log(e);
+  e.preventDefault()
+  message.error('Click on No');
 }
 class Confirm extends React.Component 
 {
@@ -21,9 +25,8 @@ class Confirm extends React.Component
     onCancel={cancel}
     okText="Yes"
     cancelText="No"
-    placement="bottom"
   >
-    <IconButton><DeleteIcon color="Error" /></IconButton>
+    <Button><DeleteIcon color="Error" /></Button>
   </Popconfirm>
 );
 }

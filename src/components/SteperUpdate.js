@@ -17,8 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 import swal from 'sweetalert';
-import db, { auth, storage } from '../firebase';
-import { useStateValue } from '../Auth';
+import db, { storage } from '../firebase';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,9 +47,9 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  }
+    id: `simple-tab-${ index }`,
+  'aria-controls': `simple-tabpanel-${ index }`
+}
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -85,10 +84,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SimpleTabs() {
+export default function SteperUpdate() {
   const classes = useStyles();
-  const [{ user, admin, president }, dispatch] = useStateValue()
-
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [value, setValue] = React.useState(0);
   const [gender, setGender] = useState('male');
@@ -98,8 +95,9 @@ export default function SimpleTabs() {
   const [lastName, setLastName] = useState('')
   const [birthday, setBirthday] = useState('')
   const [city, setCity] = useState('')
+  const [slogan, setSlogan] = useState('')
   const [createdAt, setCreatedAt] = useState('')
-  const [logo, setLogo] = useState('')
+  const [logo, setLogo] = useState(null)
   const [clubEmail, setClubEmail] = useState('')
   const [presidentEmail, setPresidentEmail] = useState('')
   const [clubPhone, setClubPhone] = useState('')
@@ -107,7 +105,7 @@ export default function SimpleTabs() {
   const [university, setUniversity] = useState('')
   const [college, setCollege] = useState('')
   const [academicLevel, setAcademicLevel] = useState('')
-  const [slogan, setSlogan] = useState('')
+
 
 
   const handleChange = (event, newValue) => {
@@ -121,33 +119,36 @@ export default function SimpleTabs() {
     setGender(event.target.value);
   };
 
-  function AddClub(e) {
+  const onFileChange = async (e) => {
+    const file = e.target.files[0];
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    await fileRef.getDownloadURL().then((res)=>  db.collection("Clubs").doc(clubName).set({
+      logo: res,
+    }))
+  }
+
+  function UpdateClub(e) {
     e.preventDefault()
-    auth.createUserWithEmailAndPassword(clubEmail, "president").then((cred) => {
-      cred.user.updateProfile({
-        displayName: clubName,
-        photoURL: logo,
-      })
-      db.collection('Clubs').doc(cred.user.uid).set({
-        firstname: firstName,
-        lastname: lastName,
-        birthday: birthday,
-        gender: gender,
-        city: city,
-        logo: logo,
-        slogan: slogan,
-        clubType: clubType,
-        presidentemail: presidentEmail,
-        presidentphone: presidentPhone,
-        university: university,
-        college: college,
-        academicLevel: academicLevel,
-        clubname: clubName,
-        createdAt: createdAt,
-        clubemail: clubEmail,
-        clubphone: clubPhone,
-      })
-      swal("Thank You", "Club added successfully", "success")
+    swal("Thank You", "Club added successfully", "success");
+    db.collection('Clubs').doc(clubName).update({
+      firstname: firstName,
+      lastname: lastName,
+      birthday: birthday,
+      gender: gender,
+      city: city,
+      slogan: slogan,
+      clubType: clubType,
+      presidentemail: presidentEmail,
+      presidentphone: presidentPhone,
+      university: university,
+      college: college,
+      academicLevel: academicLevel,
+      clubname: clubName,
+      createdAt: createdAt,
+      clubemail: clubEmail,
+      clubphone: clubPhone,
     })
   }
   return (
@@ -162,21 +163,16 @@ export default function SimpleTabs() {
       <TabPanel value={value} index={1}>
         <Grid>
           <Paper className={fixedHeightPaper}>
-            <h3 style={{ textAlign: 'center' }}>ADD CLUB LOGO</h3>
-            <TextField
-              required={true}
-              label="Club Logo"
-              value={logo}
-              onChange={(e) => { setLogo(e.target.value) }}
-            />
+            <h3 style={{ textAlign: 'center' }}>UPDATE CLUB LOGO</h3>
+            <input type="file" onChange={onFileChange} />
           </Paper>
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={0}>
         <Grid>
           <Paper className={fixedHeightPaper}>
-            <h3 style={{ textAlign: 'center' }}>ADD CLUB</h3>
-            <form className={classes.form1} Validate autoComplete="off">
+            <h3 style={{ textAlign: 'center' }}>UPDATE CLUB</h3>
+            <form className={classes.form1} Validate autoComplete="on">
               <TextField
                 required={true}
                 label="Club Name"
@@ -191,7 +187,7 @@ export default function SimpleTabs() {
                 onChange={(e) => { setCreatedAt(e.target.value) }}
               />
               <TextField
-                required={true}
+              required={true}
                 type="email"
                 label="Club Email"
                 value={clubEmail}
@@ -218,7 +214,7 @@ export default function SimpleTabs() {
                 multiline
                 rows={2}
                 value={slogan}
-                onChange={(e) => { setSlogan(e.target.value) }}
+                  onChange={(e) => { setSlogan(e.target.value) }}
               />
             </form>
           </Paper>
@@ -227,18 +223,18 @@ export default function SimpleTabs() {
       <TabPanel value={value} index={2}>
         <Grid>
           <Paper className={fixedHeightPaper}>
-            <h3 style={{ textAlign: 'center' }}>ADD PRESIDENT CLUB</h3>
+            <h3 style={{ textAlign: 'center' }}>UPDATE PRESIDENT CLUB</h3>
             <form className={classes.form1} Validate autoComplete="on">
               <div className={classes.first1}>
                 <TextField
-                  required={true}
+                required={true}
                   type="text"
                   label="First Name"
                   value={firstName}
                   onChange={(e) => { setFirstName(e.target.value) }}
                 />
                 <TextField
-                  required={true}
+                required={true}
                   type="text"
                   label="Last Name"
                   value={lastName}
@@ -246,7 +242,7 @@ export default function SimpleTabs() {
                 />
               </div>
               <TextField
-                required={true}
+              required={true}
                 label="Birthday"
                 type="date"
                 className={classes.textField}
@@ -264,49 +260,49 @@ export default function SimpleTabs() {
                 </RadioGroup>
               </FormControl>
               <TextField
-                required={true}
+              required={true}
                 type="text"
                 label="City"
                 value={city}
                 onChange={(e) => { setCity(e.target.value) }}
               />
               <TextField
-                required={true}
+              required={true}
                 type="email"
                 label="President Email"
                 value={presidentEmail}
                 onChange={(e) => { setPresidentEmail(e.target.value) }}
               />
               <TextField
-                required={true}
+              required={true}
                 type='tel'
                 label="Phone number"
                 value={presidentPhone}
                 onChange={(e) => { setPresidentPhone(e.target.value) }}
               />
               <TextField
-                required={true}
+              required={true}
                 type="text"
                 label="University"
                 value={university}
                 onChange={(e) => { setUniversity(e.target.value) }}
               />
               <TextField
-                required={true}
+              required={true}
                 type="text"
                 label="College"
                 value={college}
                 onChange={(e) => { setCollege(e.target.value) }}
               />
               <TextField
-                required={true}
+              required={true}
                 type="text"
                 label="Academic level"
                 value={academicLevel}
                 onChange={(e) => { setAcademicLevel(e.target.value) }}
               />
-              <Button variant="contained" size="large" type="submit" color="primary" onClick={AddClub}>
-                ADD
+              <Button variant="contained" size="large" type="submit" color="primary" onClick={UpdateClub}>
+                Update
               </Button>
             </form>
           </Paper>

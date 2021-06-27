@@ -20,40 +20,43 @@ import { Avatar, Container, Grid, Menu, MenuItem, Paper, ThemeProvider, withStyl
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Axios from 'axios';
 import 'antd/dist/antd.css';
-import {MessageOutlined} from '@ant-design/icons';
+import { MessageOutlined } from '@ant-design/icons';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Feed from './Feed';
 import Card from '../components/Card1';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-
+import { useStateValue } from '../Auth';
+import { auth } from '../firebase';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';
 
 const theme = createMuiTheme({
-  palette: {
-    primary:{
-        main:'#ffc107',
+    palette: {
+        primary: {
+            main: '#ffc107',
+        },
+
+        secondary: {
+            // This is green.A700 as hex.
+            main: '#009688',
+        },
     },
-    
-    secondary: {
-        // This is green.A700 as hex.
-        main: '#009688',
-      },
-  },
-  
+
 });
 
 
 function Copyright() {
     return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="/">
-          UNIV CLUB
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="/">
+                UNIV CLUB
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
     );
-  }
+}
 
 const drawerWidth = 240;
 
@@ -116,37 +119,37 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    
-  },
-  fixedHeight: {
-    height: 400,
-  },
-  fixedHeight1:{
-    height:200,
-  },
-  view:{
-      display:"flex",
-      alignItems:"center",
-      width:"140px",
-      height:"50px",
-      justifyContent:"space-between"
-  },
-  view1:{
-    display:"flex",
-    justifyContent:"space-between",
-}
-   
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+    },
+    paper: {
+        padding: theme.spacing(2),
+
+    },
+    fixedHeight: {
+        height: 400,
+    },
+    fixedHeight1: {
+        height: 200,
+    },
+    view: {
+        display: "flex",
+        alignItems: "center",
+        width: "140px",
+        height: "50px",
+        justifyContent: "space-between"
+    },
+    view1: {
+        display: "flex",
+        justifyContent: "space-between",
+    }
+
 }));
 
 const StyledMenu = withStyles({
@@ -188,16 +191,16 @@ export default function Profil() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // eslint-disable-next-line
-    const [loggedIn, setLoggedIn] = useState(false)
-
+    let history = useHistory()
+    const [{ admin, president }, dispatch] = useStateValue()
     const logout = () => {
-        Axios.get('http://localhost:3030/logout').then((response) => {
-            if (response.data.loggedIn === true) {
-                setLoggedIn(false)
-            }
-        })
-    };
+        auth.signOut()
+        dispatch({
+            type: actionTypes.SET_PRES,
+            president: false
+        }),
+            history.push('/login')
+    }
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const fixedHeight1Paper = clsx(classes.paper, classes.fixedHeight1);
 
@@ -205,47 +208,47 @@ export default function Profil() {
         <div className={classes.root}>
             <CssBaseline />
             <ThemeProvider theme={theme}>
-            <AppBar color='secondary'  position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                <Toolbar className={classes.toolbar}>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <IconButton onClick={handleClick} color="inherit">
-                        <Avatar />
-                    </IconButton>
-                    <StyledMenu
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                       <MenuItem onClick={logout}>
+                <AppBar color='secondary' position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+                    <Toolbar className={classes.toolbar}>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <IconButton onClick={handleClick} color="inherit">
+                            <Avatar />
+                        </IconButton>
+                        <StyledMenu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={logout}>
                                 <ExitToAppIcon />
                                 Logout
                             </MenuItem>
-                    </StyledMenu>
-                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        CLUB NAME
-          </Typography>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={7} color="primary">
-                            <MessageOutlined/>
-                        </Badge>
-                    </IconButton>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="primary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                    
-                </Toolbar>
-            </AppBar>
+                        </StyledMenu>
+                        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                            CLUB NAME
+                        </Typography>
+                        <IconButton color="inherit">
+                            <Badge badgeContent={7} color="primary">
+                                <MessageOutlined />
+                            </Badge>
+                        </IconButton>
+                        <IconButton color="inherit">
+                            <Badge badgeContent={4} color="primary">
+                                <NotificationsIcon />
+                            </Badge>
+                        </IconButton>
+
+                    </Toolbar>
+                </AppBar>
             </ThemeProvider>
             <Drawer
                 variant="permanent"
@@ -264,93 +267,31 @@ export default function Profil() {
             </Drawer>
 
             <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="xl" className={classes.container}>
-          <Grid container spacing={3}>
-<Feed/>
-              <Grid item xs={5}>
-              <Paper elevation={3} className={fixedHeightPaper} style={{display:"flex",flexDirection:"column",}}>
-              <div className={classes.view1}>
-                  <div className={classes.view}>
-                  <Avatar src=""/>
-                  <h6>CLUB NAME</h6>
-                  </div>
-                  <div >
-                  <IconButton>
-                  <VisibilityIcon/>
-                  </IconButton>
-                  </div>
-                  </div>
-                  <div className={classes.view1}>
-                  <div className={classes.view}>
-                  <Avatar src=""/>
-                  <h6>CLUB NAME</h6>
-                  </div>
-                  <div >
-                  <IconButton>
-                  <VisibilityIcon/>
-                  </IconButton>
-                  </div>
-                  </div>
-                  <div className={classes.view1}>
-                  <div className={classes.view}>
-                  <Avatar src=""/>
-                  <h6>CLUB NAME</h6>
-                  </div>
-                  <div >
-                  <IconButton>
-                  <VisibilityIcon/>
-                  </IconButton>
-                  </div>
-                  </div>
-                  <div className={classes.view1}>
-                  <div className={classes.view}>
-                  <Avatar src=""/>
-                  <h6>CLUB NAME</h6>
-                  </div>
-                  <div >
-                  <IconButton>
-                  <VisibilityIcon/>
-                  </IconButton>
-                  </div>
-                  </div><div className={classes.view1}>
-                  <div className={classes.view}>
-                  <Avatar src=""/>
-                  <h6>CLUB NAME</h6>
-                  </div>
-                  <div >
-                  <IconButton>
-                  <VisibilityIcon/>
-                  </IconButton>
-                  </div>
-                  </div>
-              </Paper>
-              </Grid>
-                <Grid item xs={7}>
-                <Card/>
-              </Grid>
-              <Grid item xs={7}>
-                <Card/>
-              </Grid>
-              <Grid item xs={7}>
-                <Card/>
-              </Grid>
-              <Grid item xs={7}>
-                <Card/>
-              </Grid>
-              
-            
-             
-              
-              
-          </Grid>
-         
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-                   
+                <div className={classes.appBarSpacer} />
+                <Container maxWidth="xl" className={classes.container}>
+                    <Grid container spacing={3}>
+                        <Feed />
+                        <Grid item xs={5}>
+                            <Paper elevation={3} className={fixedHeightPaper} style={{ display: "flex", flexDirection: "column", }}>
+                                <div className={classes.view1}>
+                                    <div className={classes.view}>
+                                        <Avatar src="" />
+                                        <h6>CLUB NAME</h6>
+                                    </div>
+                                    <div >
+                                        <IconButton>
+                                            <VisibilityIcon />
+                                        </IconButton>
+                                    </div>
+                                </div>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                    <Box pt={4}>
+                        <Copyright />
+                    </Box>
+                </Container>
+            </main>
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -39,38 +39,35 @@ import { CSVLink, CSVDownload } from "react-csv";
 import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import ReactExport from "react-export-excel";
-
-
-
+import db, { auth } from '../firebase';
+import { useStateValue } from '../Auth';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';
 
 const theme = createMuiTheme({
     palette: {
         primary: {
             main: '#ffc107',
         },
-
         secondary: {
             // This is green.A700 as hex.
             main: '#009688',
         },
     },
-
 });
-
 
 function Copyright() {
     return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="/">
-          UNIV CLUB
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="/">
+                UNIV CLUB
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
     );
-  }
-
+}
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -79,10 +76,10 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: {
         margin: theme.spacing(1),
-      },
-      CloudDownloadOutlinedIcon: {
+    },
+    CloudDownloadOutlinedIcon: {
         marginRight: theme.spacing(1),
-      },
+    },
     toolbar: {
         paddingRight: 24, // keep right padding when drawer closed
     },
@@ -138,21 +135,21 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+    },
     fixedHeight: {
         height: 500,
     },
@@ -161,20 +158,18 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        
-      },
-      
-      ttl: {
+    },
+
+    ttl: {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         paddingBottom: "3%",
-      },
-      paper1: {
+    },
+    paper1: {
         padding: theme.spacing(1),
         backgroundColor: theme.palette.background.paper,
-      },
-      
+    },
 }));
 
 const StyledMenu = withStyles({
@@ -196,49 +191,12 @@ const StyledMenu = withStyles({
         {...props}
     />
 ));
-function createData(id, firstname,lastname,birthday, city,email, phone, univ,coll,acad) {
-    return { id, firstname,lastname,birthday, city,email, phone, univ,coll,acad};
-  }
-  
-  const rows = [
-    createData(0,'First Name', 'Last Name', '16 Mar, 1999', 'Sidi bel Abbes','Membre@gmail.com','+213 541807279','UDL','Faculty of Sciences Exact','3eme Année'),
-    createData(1,'First Name', 'Last Name', '16 Mar, 1999', 'Sidi bel Abbes','Membre@gmail.com','+213 541807279','UDL','Faculty of Sciences Exact','3eme Année'),
-    createData(2,'First Name', 'Last Name', '16 Mar, 1999', 'Sidi bel Abbes','Membre@gmail.com','+213 541807279','UDL','Faculty of Sciences Exact','3eme Année'),
-    createData(3,'First Name', 'Last Name', '16 Mar, 1999', 'Sidi bel Abbes','Membre@gmail.com','+213 541807279','UDL','Faculty of Sciences Exact','3eme Année'),
-    createData(4,'First Name', 'Last Name', '16 Mar, 1999', 'Sidi bel Abbes','Membre@gmail.com','+213 541807279','UDL','Faculty of Sciences Exact','3eme Année'),
-  ];
 
 export default function Members() {
     const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-const dataSet1 = [
-    {
-        name: "Johson",
-        amount: 30000,
-        sex: 'M',
-        is_married: true
-    },
-    {
-        name: "Monika",
-        amount: 355000,
-        sex: 'F',
-        is_married: false
-    },
-    {
-        name: "John",
-        amount: 250000,
-        sex: 'M',
-        is_married: false
-    },
-    {
-        name: "Josef",
-        amount: 450500,
-        sex: 'M',
-        is_married: true
-    }
-];
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -256,41 +214,47 @@ const dataSet1 = [
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // eslint-disable-next-line
-    const [loggedIn, setLoggedIn] = useState(false)
+    let history = useHistory()
 
+    const [{ user, admin, president }, dispatch] = useStateValue()
     const logout = () => {
-        Axios.get('http://localhost:3030/logout').then((response) => {
-            if (response.data.loggedIn === true) {
-                setLoggedIn(false)
-            }
-        })
-    };
+        auth.signOut()
+        dispatch({
+            type: actionTypes.SET_PRES,
+            president: false
+        }),
+            history.push('/login')
+    }
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    const user = clsx(classes.Grid, classes.user);
     const [open1, setOpen1] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
 
     const handleOpen1 = () => {
         setOpen1(true);
-      };
-      const handleOpen2 = () => {
+    };
+    const handleOpen2 = () => {
         setOpen2(true);
-      };
+    };
     const handleClose1 = () => {
         setOpen1(false);
-    
-      };
-      const handleClose2 = () => {
+
+    };
+    const handleClose2 = () => {
         setOpen2(false);
-    
-      };
+
+    };
+    const [clubs, setClubs] = useState([])
+    useEffect(() => {
+        db.collection("Clubs").doc(user.uid).collection('members').onSnapshot((snapshot) =>
+            setClubs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+        )
+    }, [])
     return (
         <div className={classes.root}>
             <CssBaseline />
             <ThemeProvider theme={theme}>
                 <AppBar color='secondary' position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                <Toolbar className={classes.toolbar}>
+                    <Toolbar className={classes.toolbar}>
                         <IconButton
                             edge="start"
                             color="inherit"
@@ -353,104 +317,102 @@ const dataSet1 = [
                     <Grid container spacing={3}>
                         <Grid item xs={12}  >
                             <Paper className={classes.paper}  >
-                            
-      <div className={classes.ttl}>
-        <Title color='secondary'>MEMBERS</Title>
-        <Fab onClick={handleOpen1} color="primary" aria-label="add" className={classes.margin}>
-          <AddIcon />
-        </Fab>
-      </div>
-      <ExcelFile element={<Button type="primary" shape="round" icon={<DownloadOutlined />} >
-          Export Data
-        </Button>}>
-                <ExcelSheet data={rows} name="Employees">
-                    <ExcelColumn label="Name" value="firstname"/>
-                    <ExcelColumn label="Wallet Money" value="amount"/>
-                    <ExcelColumn label="Gender" value="sex"/>
-                    <ExcelColumn label="Marital Status"
-                                 value={(col) => col.is_married ? "Married" : "Single"}/>
-                </ExcelSheet>
-                
-            </ExcelFile>
-      
-    
-      <Table size="medium">
-        <TableHead>
-          <TableRow>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
-            <TableCell>Birthday</TableCell>
-            <TableCell>City</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell >Phone Number</TableCell>
-            <TableCell >University</TableCell>
-            <TableCell >The College</TableCell>
-            <TableCell >Academic level</TableCell>
-            <TableCell >Edit/Del</TableCell>
 
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.firstname}</TableCell>
-              <TableCell>{row.lasttname}</TableCell>
-              <TableCell>{row.birthday}</TableCell>
-              <TableCell>{row.city}</TableCell>
-              <TableCell >{row.email}</TableCell>
-              <TableCell >{row.phone}</TableCell>
-              <TableCell >{row.univ}</TableCell>
-              <TableCell >{row.coll}</TableCell>
-              <TableCell >{row.acad}</TableCell>
+                                <div className={classes.ttl}>
+                                    <Title color='secondary'>MEMBERS</Title>
+                                    <Fab onClick={handleOpen1} color="primary" aria-label="add" className={classes.margin}>
+                                        <AddIcon />
+                                    </Fab>
+                                </div>
+                                
+                                <ExcelFile element={<Button type="primary" shape="round" icon={<DownloadOutlined />} >
+                                    Export Data
+                                </Button>}>
+                                {clubs.map((club) => (
+                                    <ExcelSheet data={clubs} name="Employees">
+                                        <ExcelColumn label="Name" value={club.data.firstname} />
+                                        <ExcelColumn label="Wallet Money" value="lastname" />
+                                        <ExcelColumn label="Gender" value="gender" />
+                                        <ExcelColumn label="Marital Status"  value="city" />
+                                    </ExcelSheet>
+                                     ))}
+                                </ExcelFile>
+                               
+                                <Table size="medium">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>First Name</TableCell>
+                                            <TableCell>Last Name</TableCell>
+                                            <TableCell>Birthday</TableCell>
+                                            <TableCell>City</TableCell>
+                                            <TableCell>Email</TableCell>
+                                            <TableCell >Phone Number</TableCell>
+                                            <TableCell >University</TableCell>
+                                            <TableCell >The College</TableCell>
+                                            <TableCell >Academic level</TableCell>
+                                            <TableCell >Edit/Del</TableCell>
 
-              <TableCell >
-                <IconButton onClick={handleOpen2}><EditIcon /></IconButton>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {clubs.map((club) => (
+                                            <TableRow key={club.id}>
+                                                <TableCell>{club.data.firstname}</TableCell>
+                                                <TableCell>{club.data.lastname}</TableCell>
+                                                <TableCell>{club.data.birthday}</TableCell>
+                                                <TableCell>{club.data.city}</TableCell>
+                                                <TableCell >{club.data.memberemail}</TableCell>
+                                                <TableCell >{club.data.memberphone}</TableCell>
+                                                <TableCell >{club.data.university}</TableCell>
+                                                <TableCell >{club.data.college}</TableCell>
+                                                <TableCell >{club.data.academicLevel}</TableCell>
 
-                
-               <Confirm/>
-              </TableCell>
+                                                <TableCell >
+                                                    <IconButton onClick={handleOpen2}><EditIcon /></IconButton>
+                                                    <Confirm />
+                                                </TableCell>
 
 
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open1}
-        onClose={handleClose1}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open1}>
-          <Addmember/>
-        </Fade>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                <Modal
+                                    aria-labelledby="transition-modal-title"
+                                    aria-describedby="transition-modal-description"
+                                    className={classes.modal}
+                                    open={open1}
+                                    onClose={handleClose1}
+                                    closeAfterTransition
+                                    BackdropComponent={Backdrop}
+                                    BackdropProps={{
+                                        timeout: 500,
+                                    }}
+                                >
+                                    <Fade in={open1}>
+                                        <Addmember />
+                                    </Fade>
 
-      </Modal>
+                                </Modal>
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open2}
-        onClose={handleClose2}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open2}>
-        <Editmember/>
-        </Fade>
+                                <Modal
+                                    aria-labelledby="transition-modal-title"
+                                    aria-describedby="transition-modal-description"
+                                    className={classes.modal}
+                                    open={open2}
+                                    onClose={handleClose2}
+                                    closeAfterTransition
+                                    BackdropComponent={Backdrop}
+                                    BackdropProps={{
+                                        timeout: 500,
+                                    }}
+                                >
+                                    <Fade in={open2}>
+                                        <Editmember />
+                                    </Fade>
 
-      </Modal>
-    
+                                </Modal>
+
                             </Paper>
                         </Grid>
                     </Grid>

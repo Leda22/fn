@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,6 +12,8 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import moment from 'moment';
+import db from '../firebase';
  
 
 function TabPanel(props) {
@@ -100,7 +102,12 @@ export default function NavTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const [msgs, setMsgs] = useState([])
+  useEffect(() => {
+    db.collection("ContactUs").onSnapshot((snapshot) =>
+      setMsgs(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })))
+    )
+  }, [])
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -130,11 +137,9 @@ export default function NavTabs() {
               </div>
               </div>
               
-              
           <Typography className={classes.secondaryHeading}>Subject</Typography>
           <Typography >Email</Typography>
 
-        
         </AccordionSummary>
         <AccordionDetails>
           <Typography style={{paddingRight:"50%"}} >
@@ -146,39 +151,35 @@ export default function NavTabs() {
               </IconButton>
         </AccordionDetails>
       </Accordion>
-     
-              
-              
-         
+
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange1('panel1')}>
+      {msgs.map((msg) => (
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange1('panel1')} key={msg.id}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
           <div className={classes.name}>
-              <h6>First name + Last name</h6>
-              <p style={{color:"grey"}}>May,15 2021</p>
+              <h6>{msg.data.firstname+" "+msg.data.lastname}</h6>
+              <p style={{color:"grey"}}>{moment().toDate().toUTCString()}</p>
               </div>
               
-              
-          <Typography className={classes.secondaryHeading}>Subject</Typography>
-          <Typography >Email</Typography>
+          <Typography className={classes.secondaryHeading}>{msg.data.firstname}</Typography>
+          <Typography >{msg.data.email}</Typography>
 
-        
         </AccordionSummary>
         <AccordionDetails>
           <Typography style={{paddingRight:"50%"}} >
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget
-            maximus est, id dignissim quam.
+            {msg.data.message}
           </Typography>
           <IconButton >
                   <DeleteIcon />
               </IconButton>
         </AccordionDetails>
       </Accordion>
+      ))}
       </TabPanel>
      
     </div>

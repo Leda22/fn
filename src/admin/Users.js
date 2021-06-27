@@ -23,7 +23,10 @@ import UsersTable from './UsersTable';
 import { Avatar, Menu, MenuItem, withStyles } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmailIcon from '@material-ui/icons/Email';
-import Axios from 'axios'
+import { auth } from '../firebase';
+import { useStateValue } from '../Auth';
+import { actionTypes } from '../reducer';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -155,15 +158,17 @@ export default function Users() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // eslint-disable-next-line
-  const [loggedIn, setLoggedIn] = useState(false)
+  let history = useHistory()
 
+  const [{ admin, president }, dispatch] = useStateValue()
   const logout = () => {
-    Axios.get('http://localhost:3030/logout').then((response) => {
-      if (response.data.loggedIn === true) {
-        setLoggedIn(false)
-      }
-  })}
+    auth.signOut()
+    dispatch({
+      type:actionTypes.SET_ADMIN,
+      admin: false
+    }),
+    history.push('/login')
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />

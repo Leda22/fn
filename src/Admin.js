@@ -1,5 +1,4 @@
 import React from 'react'
-//import { Redirect } from 'react-router-dom'
 import Dashboard from './admin/Dashboard';
 
 
@@ -22,13 +21,7 @@ function Admin() {
           <Route exact path="/admin/clubpresidents" component={Clubpresident}/>
           <Route exact path="/admin/clubprofil" component={Clubprofil}/>
           <Route exact path="/admin/inbox" component={Email}/>
-
-
-
-          
-
-        
-        </Switch>
+          </Switch>
     </Router>
     )
 }
